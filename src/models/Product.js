@@ -2,61 +2,50 @@ import mongoose from "mongoose";
 
 const productSchema = new mongoose.Schema(
   {
-    name: {
-      type: String,
-      required: true
-    },
+    name: { type: String, required: true },
+    slug: { type: String, required: true, unique: true },
 
-    slug: {
-      type: String,
+    brand: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Brand",
       required: true,
-      unique: true
     },
 
-    // 🔹 CATEGORY (single)
-    category: {
-      type: String, // category slug
-      required: true,
-      index: true
-    },
-
-    // 🔹 MATERIALS (multiple)
     materials: [
       {
-        type: String, // material slug
-        index: true
-      }
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Material",
+      },
     ],
 
-    // 🔹 INDUSTRIES (multiple)
     industries: [
       {
-        type: String, // industry slug
-        index: true
-      }
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Industry",
+      },
     ],
 
-    image: {
-        type: String,
-        default: "",
-    },
-
-
     description: [String],
-
     keyFeatures: [String],
-
     applications: [String],
 
-    specifications: Object,
+    specifications: {
+      model: String,
+      materialType: String,
+      molecularWeight: String,
+      form: String,
+      thicknessRange: String,
+      packagingType: String,
+      colourOptions: [String],
+      applicationAreas: [String],
+      primaryUse: String,
+      industrySuitability: String,
+      keyProperties: [String],
+      machinability: String,
+    },
 
     pdfUrl: String,
-
-    seo: {
-      metaTitle: String,
-      metaDescription: String,
-      keywords: [String]
-    }
+    image: String,
   },
   { timestamps: true }
 );

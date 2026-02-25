@@ -1,44 +1,38 @@
 import express from "express";
-import path from "path";
 import cors from "cors";
+import path from "path";
 import { fileURLToPath } from "url";
 
-//Route Imports
+import categoryRoutes from "./routes/categoryRoutes.js";
+import subCategoryRoutes from "./routes/subCategoryRoutes.js";
+import brandRoutes from "./routes/brandRoutes.js";
 import productRoutes from "./routes/productRoutes.js";
 import industryRoutes from "./routes/industryRoutes.js";
 import materialRoutes from "./routes/materialRoutes.js";
-import productFilterRoutes from "./routes/productFilterRoutes.js";
-import categoryRoutes from "./routes/categoryRoutes.js";
-
-import catalogRequestRoutes from "./routes/catalogRequestRoutes.js";
-
-const app = express();
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-//Middlewares
+const app = express();
+
+/* ✅ CORS — OPEN FOR NOW (SAFE FOR DEV & INITIAL DEPLOY) */
 app.use(cors());
+
+/* ✅ BODY PARSER */
 app.use(express.json());
 
+/* ✅ STATIC IMAGE SERVING */
 app.use(
-    "/catalogs",
-    express.static(path.join(__dirname, "../public/catalogs")
-));
-
-app.use(
-  "/uploads",
-  express.static(path.join(__dirname, "../public/uploads"))
+  "/uploads/products",
+  express.static(path.join(__dirname, "../public/uploads/products"))
 );
 
-//API Routes
-app.use("/api/products", productFilterRoutes);
+/* ✅ API ROUTES */
+app.use("/api/categories", categoryRoutes);
+app.use("/api/subcategories", subCategoryRoutes);
+app.use("/api/brands", brandRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/industries", industryRoutes);
 app.use("/api/materials", materialRoutes);
-app.use("/api/categories", categoryRoutes);
-
-app.use("/api/catalog-requests", catalogRequestRoutes);
-
 
 export default app;

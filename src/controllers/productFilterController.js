@@ -64,12 +64,6 @@ if (search && search.trim() !== "") {
         industry: industry || null,
         search: search || null
       },
-      pagination: {
-        total,
-        page: pageNumber,
-        limit: pageLimit,
-        totalPages: Math.ceil(total / pageLimit)
-      },
       products
     });
 
