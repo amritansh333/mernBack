@@ -14,8 +14,8 @@ router.get("/", async (req, res) => {
     }
 
     const subCategories = await SubCategory.find({
-      category: new mongoose.Types.ObjectId(category),
-    }).sort({ name: 1 });
+      category: new mongoose.Types.ObjectId(category)
+    });
 
     res.json(subCategories);
   } catch (error) {
