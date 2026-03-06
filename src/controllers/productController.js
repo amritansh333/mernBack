@@ -13,8 +13,7 @@ export const getAllProducts = async (req, res) => {
     }
 
     const products = await Product.find(filter)
-      .populate("brand")
-      .sort({ createdAt: -1 });
+      .populate("brand");
 
     res.status(200).json(products);
 
