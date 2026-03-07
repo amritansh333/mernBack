@@ -13,7 +13,9 @@ export const getAllProducts = async (req, res) => {
     }
 
     const products = await Product.find(filter)
-      .populate("brand");
+      .populate("brand")
+      .populate("materials", "name")   
+      .lean();  
 
     res.status(200).json(products);
 
@@ -28,7 +30,7 @@ export const getProductBySlug = async (req, res) => {
   try {
     const product = await Product.findOne({ slug: req.params.slug })
       .populate("brand")
-      .populate("materials")
+      .populate("materials", "name")
       .populate("industries");
 
     if (!product) {
