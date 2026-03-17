@@ -27,6 +27,11 @@ app.use(
   express.static(path.join(__dirname, "../public/uploads/products"))
 );
 
+app.use(
+  "/uploads/subcategories",
+  express.static(path.join(__dirname, "../public/uploads/subcategories"))
+);
+
 /* ✅ API ROUTES */
 app.use("/api/categories", categoryRoutes);
 app.use("/api/subcategories", subCategoryRoutes);
