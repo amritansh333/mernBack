@@ -1,21 +1,24 @@
 import Brand from "../models/Brand.js";
 import mongoose from "mongoose";
 
-export const getBrands = async (req, res) => {
+export const getBrandsBySubCategorySlug = async (req, res) => {
   try {
-    const { subcategory } = req.query;
 
-    if (!subcategory || !mongoose.Types.ObjectId.isValid(subcategory)) {
-      return res.status(200).json([]);
+    const sub = await mongoose.model("SubCategory").findOne({
+      slug: req.params.slug
+    });
+
+    if (!sub) {
+      return res.status(404).json({ message: "SubCategory not found" });
     }
 
     const brands = await Brand.find({
-      subcategory: new mongoose.Types.ObjectId(subcategory),
+      subCategory: sub._id
     });
 
-    return res.status(200).json(brands);
+    res.json(brands);
 
   } catch (error) {
-    return res.status(500).json({ message: error.message });
+    res.status(500).json({ message: error.message });
   }
 };

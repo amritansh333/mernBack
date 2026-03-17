@@ -17,6 +17,7 @@ const brandSchema = new mongoose.Schema(
         ref: "Material",
       },
     ],
+    image: String,
   },
   { timestamps: true }
 );

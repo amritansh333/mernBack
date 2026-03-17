@@ -1,21 +1,24 @@
 import SubCategory from "../models/SubCategory.js";
 import mongoose from "mongoose";
 
-export const getSubCategories = async (req, res) => {
+export const getSubCategoriesByCategorySlug = async (req, res) => {
   try {
-    const { category } = req.query;
 
-    if (!category || !mongoose.Types.ObjectId.isValid(category)) {
-      return res.status(200).json([]);
+    const category = await mongoose.model("Category").findOne({
+      slug: req.params.slug
+    });
+
+    if (!category) {
+      return res.status(404).json({ message: "Category not found" });
     }
 
     const subcategories = await SubCategory.find({
-      category: new mongoose.Types.ObjectId(category),
+      category: category._id
     });
 
-    return res.status(200).json(subcategories);
+    res.json(subcategories);
 
   } catch (error) {
-    return res.status(500).json({ message: error.message });
+    res.status(500).json({ message: error.message });
   }
 };

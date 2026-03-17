@@ -1,10 +1,14 @@
 import express from "express";
 import mongoose from "mongoose";
 import SubCategory from "../models/SubCategory.js";
+import { getSubCategoriesByCategorySlug } from "../controllers/subCategoryController.js";
 
 const router = express.Router();
 
-// GET SUBCATEGORIES BY CATEGORY
+/* NEW ROUTE — USING SLUG */
+router.get("/by-category/:slug", getSubCategoriesByCategorySlug);
+
+/* OLD ROUTE — KEEP */
 router.get("/", async (req, res) => {
   try {
     const { category } = req.query;

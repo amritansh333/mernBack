@@ -1,4 +1,5 @@
 import Product from "../models/Product.js";
+import mongoose from "mongoose";
 
 // Get all products
 export const getAllProducts = async (req, res) => {
@@ -7,15 +8,14 @@ export const getAllProducts = async (req, res) => {
 
     let filter = {};
 
-    // If brand query exists, filter by brand
     if (brand) {
       filter.brand = brand;
     }
 
     const products = await Product.find(filter)
       .populate("brand")
-      .populate("materials", "name")   
-      .lean();  
+      .populate("materials", "name")
+      .lean();
 
     res.status(200).json(products);
 
@@ -24,23 +24,25 @@ export const getAllProducts = async (req, res) => {
   }
 };
 
-// Get single product by slug (SEO-friendly)
-
-export const getProductBySlug = async (req, res) => {
+// Get products by brand slug
+export const getProductsByBrandSlug = async (req, res) => {
   try {
-    const product = await Product.findOne({ slug: req.params.slug })
-      .populate("brand")
-      .populate("materials", "name")
-      .populate("industries");
 
-    if (!product) {
-      return res.status(404).json({ message: "Product not found" });
+    const brand = await mongoose.model("Brand").findOne({
+      slug: req.params.slug
+    });
+
+    if (!brand) {
+      return res.status(404).json({ message: "Brand not found" });
     }
 
-    // IMPORTANT: always return full object
-    return res.status(200).json(product);
+    const products = await Product.find({
+      brand: brand._id
+    });
+
+    res.json(products);
 
   } catch (error) {
-    return res.status(500).json({ message: error.message });
+    res.status(500).json({ message: error.message });
   }
 };

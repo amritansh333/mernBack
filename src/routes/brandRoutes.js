@@ -1,10 +1,14 @@
 import express from "express";
 import mongoose from "mongoose";
 import Brand from "../models/Brand.js";
+import { getBrandsBySubCategorySlug } from "../controllers/brandController.js";
 
 const router = express.Router();
 
-// GET BRANDS BY SUBCATEGORY
+/* NEW ROUTE — USING SLUG */
+router.get("/by-subcategory/:slug", getBrandsBySubCategorySlug);
+
+/* OLD ROUTE — KEEP FOR QUERY SUPPORT */
 router.get("/", async (req, res) => {
   try {
     const { subcategory } = req.query;

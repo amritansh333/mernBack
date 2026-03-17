@@ -1,10 +1,14 @@
 import express from "express";
 import mongoose from "mongoose";
 import Product from "../models/Product.js";
+import { getProductsByBrandSlug } from "../controllers/productController.js";
 
 const router = express.Router();
 
-// GET PRODUCTS BY BRAND
+/* NEW ROUTE — PRODUCTS BY BRAND SLUG */
+router.get("/by-brand/:slug", getProductsByBrandSlug);
+
+/* OLD ROUTE — PRODUCTS BY BRAND ID */
 router.get("/", async (req, res) => {
   try {
     const { brand } = req.query;
@@ -26,7 +30,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-// GET SINGLE PRODUCT BY SLUG
+/* SINGLE PRODUCT BY SLUG */
 router.get("/:slug", async (req, res) => {
   try {
     const product = await Product.findOne({ slug: req.params.slug })
