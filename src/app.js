@@ -23,6 +23,11 @@ app.use(express.json());
 
 /* ✅ STATIC IMAGE SERVING */
 app.use(
+  "/uploads/brands",
+  express.static(path.join(__dirname, "../public/uploads/brands"))
+);
+
+app.use(
   "/uploads/products",
   express.static(path.join(__dirname, "../public/uploads/products"))
 );
