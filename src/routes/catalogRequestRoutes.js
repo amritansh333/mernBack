@@ -4,13 +4,13 @@ import CatalogRequest from "../models/CatalogRequest.js";
 const router = express.Router();
 
 const catalogPdfMap = {
-  "Polyrib": "/catalogs/Polyrib.pdf",
-  "Arete": "/catalogs/Arete%20Lining%20Materials.pdf",
-  "Dipra": "/catalogs/Dipra%20Specialty%20Sheets.pdf",
-  "Hitech": "/catalogs/Hitech%20Polymer%20Sheets.pdf",
-  "PC Clear": "/catalogs/PC%20Clear%20Sheets.pdf",
-  "Plascon": "/catalogs/Plascon.pdf",
-  "Ripla": "/catalogs/Ripla%20Cutting%20Boards.pdf"
+  cat1: "/catalogs/Polyrib_Master_Product_Catalogue.pdf",
+  cat2: "/catalogs/Plascon_Brochure.pdf",
+  cat3: "/catalogs/Ripla_Cutting_Boards_Catalogue.pdf",
+  cat4: "/catalogs/PC_Clear_Sheets_Catalogue.pdf",
+  cat5: "/catalogs/Dipra_Speciality_Sheets_Brochure.pdf",
+  cat6: "/catalogs/Arete_Lining_Materials_Catalogue.pdf",
+  cat7: "/catalogs/Hitech_Polymer_Sheets_Catalogue.pdf",
 };
 
 
@@ -37,8 +37,7 @@ if (!downloadUrl) {
 
 res.status(201).json({
   success: true,
-  message: "Request submitted successfully",
-  downloadUrl
+  downloadUrl: `${process.env.BASE_URL}${downloadUrl}`,
 });
 
 

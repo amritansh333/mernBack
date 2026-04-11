@@ -47,4 +47,6 @@ app.use("/api/industries", industryRoutes);
 app.use("/api/materials", materialRoutes);
 app.use("/api/enquiries", enquiryRoutes);
 
+app.use("/catalogs", express.static("public/catalogs"));
+
 export default app;
