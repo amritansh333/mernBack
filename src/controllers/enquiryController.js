@@ -1,7 +1,7 @@
 import Enquiry from "../models/Enquiry.js";
-import mongoose from "mongoose";
 
-const createEnquiry = async (req, res) => {
+
+export const createEnquiry = async (req, res) => {
   try {
     const enquiry = new Enquiry(req.body);
     await enquiry.save();
