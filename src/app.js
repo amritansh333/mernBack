@@ -9,6 +9,7 @@ import brandRoutes from "./routes/brandRoutes.js";
 import productRoutes from "./routes/productRoutes.js";
 import industryRoutes from "./routes/industryRoutes.js";
 import materialRoutes from "./routes/materialRoutes.js";
+import enquiryRoutes from "./routes/enquiryRoutes.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -44,5 +45,6 @@ app.use("/api/brands", brandRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/industries", industryRoutes);
 app.use("/api/materials", materialRoutes);
+app.use("/api/enquiries", enquiryRoutes);
 
 export default app;
