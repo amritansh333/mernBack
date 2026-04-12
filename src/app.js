@@ -3,7 +3,7 @@ import cors from "cors";
 import path from "path";
 import { fileURLToPath } from "url";
 
-import catalogRoutes from "./routes/catalogRequests.js";
+import catalogRoutes from "./routes/catalogRequestRoutes.js";
 import categoryRoutes from "./routes/categoryRoutes.js";
 import subCategoryRoutes from "./routes/subCategoryRoutes.js";
 import brandRoutes from "./routes/brandRoutes.js";
