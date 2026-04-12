@@ -3,6 +3,7 @@ import cors from "cors";
 import path from "path";
 import { fileURLToPath } from "url";
 
+import catalogRoutes from "./routes/catalogRequests.js";
 import categoryRoutes from "./routes/categoryRoutes.js";
 import subCategoryRoutes from "./routes/subCategoryRoutes.js";
 import brandRoutes from "./routes/brandRoutes.js";
@@ -47,6 +48,6 @@ app.use("/api/industries", industryRoutes);
 app.use("/api/materials", materialRoutes);
 app.use("/api/enquiries", enquiryRoutes);
 
-app.use("/catalogs", express.static("public/catalogs"));
+app.use("/api/catalogrequests", catalogRoutes);
 
 export default app;
