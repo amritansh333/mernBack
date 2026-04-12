@@ -4,13 +4,13 @@ import CatalogRequest from "../models/CatalogRequest.js";
 const router = express.Router();
 
 const catalogPdfMap = {
-  cat1: "/catalogs/Polyrib_Master_Product_Catalogue.pdf",
-  cat2: "/catalogs/Plascon_Brochure.pdf",
-  cat3: "/catalogs/Ripla_Cutting_Boards_Catalogue.pdf",
-  cat4: "/catalogs/PC_Clear_Sheets_Catalogue.pdf",
-  cat5: "/catalogs/Dipra_Speciality_Sheets_Brochure.pdf",
-  cat6: "/catalogs/Arete_Lining_Materials_Catalogue.pdf",
-  cat7: "/catalogs/Hitech_Polymer_Sheets_Catalogue.pdf",
+  Polyrib_Brochure: "/catalogs/Polyrib_Master_Product_Catalogue.pdf",
+  Plascon_Brochure: "/catalogs/Plascon_Brochure.pdf",
+  Ripla_Brochure: "/catalogs/Ripla_Cutting_Boards_Catalogue.pdf",
+  Pcclear_Brochure: "/catalogs/PC_Clear_Sheets_Catalogue.pdf",
+  Dipra_Brochure: "/catalogs/Dipra_Speciality_Sheets_Brochure.pdf",
+  Arete_Brochure: "/catalogs/Arete_Lining_Materials_Catalogue.pdf",
+  Hitech_Brochure: "/catalogs/Hitech_Polymer_Sheets_Catalogue.pdf",
 };
 
 
