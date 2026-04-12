@@ -39,6 +39,11 @@ app.use(
   express.static(path.join(__dirname, "../public/uploads/subcategories"))
 );
 
+app.use(
+  "/catalogs",
+  express.static(path.join(__dirname, "../public/catalogs"))
+);
+
 /* ✅ API ROUTES */
 app.use("/api/categories", categoryRoutes);
 app.use("/api/subcategories", subCategoryRoutes);
@@ -48,6 +53,6 @@ app.use("/api/industries", industryRoutes);
 app.use("/api/materials", materialRoutes);
 app.use("/api/enquiries", enquiryRoutes);
 
-app.use("/api/catalogrequests", catalogRoutes);
+
 
 export default app;
