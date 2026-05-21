@@ -19,7 +19,7 @@ router.get("/", async (req, res) => {
 
     const brands = await Brand.find({
       subCategory: new mongoose.Types.ObjectId(subcategory),
-    });
+    }).sort({ order: 1 });
 
     res.json(brands);
   } catch (error) {

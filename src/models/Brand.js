@@ -18,6 +18,10 @@ const brandSchema = new mongoose.Schema(
       },
     ],
     image: String,
+    order: {
+      type: Number,
+      default: 99, // Default order if not specified
+    },
   },
   { timestamps: true }
 );

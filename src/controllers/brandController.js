@@ -14,7 +14,7 @@ export const getBrandsBySubCategorySlug = async (req, res) => {
 
     const brands = await Brand.find({
       subCategory: sub._id
-    });
+    }).sort({ order: 1 });
 
     res.json(brands);
 
