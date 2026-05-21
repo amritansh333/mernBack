@@ -9,7 +9,11 @@ const subCategorySchema = new mongoose.Schema(
       ref: "Category",
       required: true,
     },
-    image: String
+    image: String,
+    order: {
+      type: Number,
+      default: 0,
+    }
   },
   { timestamps: true }
 );

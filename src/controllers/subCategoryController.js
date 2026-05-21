@@ -14,7 +14,7 @@ export const getSubCategoriesByCategorySlug = async (req, res) => {
 
     const subcategories = await SubCategory.find({
       category: category._id
-    });
+    }).sort({ order: 1 });
 
     res.json(subcategories);
 
