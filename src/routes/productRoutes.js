@@ -20,6 +20,7 @@ router.get("/", async (req, res) => {
     const products = await Product.find({
       brand: new mongoose.Types.ObjectId(brand),
     })
+      .sort({ order: 1 })
       .populate("brand")
       .populate("materials")
       .populate("industries");

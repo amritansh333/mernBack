@@ -13,6 +13,7 @@ export const getAllProducts = async (req, res) => {
     }
 
     const products = await Product.find(filter)
+      .sort({ order: 1 })
       .populate("brand")
       .populate("materials", "name")
       .lean();
@@ -38,7 +39,10 @@ export const getProductsByBrandSlug = async (req, res) => {
 
     const products = await Product.find({
       brand: brand._id
-    });
+    }).sort({ order: 1 })
+      .populate("brand")
+      .populate("materials", "name")
+      .lean();
 
     res.json(products);
 

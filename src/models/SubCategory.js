@@ -12,8 +12,8 @@ const subCategorySchema = new mongoose.Schema(
     image: String,
     order: {
       type: Number,
-      default: 0,
-    }
+      default: 99, // Default order if not specified
+    },
   },
   { timestamps: true }
 );
