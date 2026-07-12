@@ -20,9 +20,8 @@ export const getMaterialBySlug = async (req, res) => {
     }
 
     const products = await Product.find({
-      materials: material.slug
-
-    });
+      materials: material._id
+    }).sort({ order: 1 });
 
     res.json({
       material,

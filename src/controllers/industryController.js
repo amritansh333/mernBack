@@ -28,11 +28,9 @@ export const getIndustryBySlug = async (req, res) => {
       return res.status(404).json({ message: "Industry not found" });
     }
 
-    // 2. Find related products (TEMP LOGIC)
     const products = await Product.find({
-      industries: industry.slug
-
-    });
+      industries: industry._id
+    }).sort({ order: 1 });
 
     res.json({
       industry,

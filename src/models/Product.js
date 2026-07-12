@@ -50,6 +50,25 @@ const productSchema = new mongoose.Schema(
 
     pdfUrl: String,
     image: String,
+    machineComponentData: {
+      summary: String,
+      applications: [String],
+      specifications: mongoose.Schema.Types.Mixed,
+      downloads: [
+        {
+          label: String,
+          url: String,
+        },
+      ],
+      order: {
+        type: Number,
+        default: 99,
+      },
+      isVisible: {
+        type: Boolean,
+        default: true,
+      },
+    },
   },
   { timestamps: true }
 );

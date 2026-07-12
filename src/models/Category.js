@@ -1,4 +1,8 @@
 import mongoose from "mongoose";
+import {
+  DEFAULT_PRODUCT_EXPERIENCE,
+  PRODUCT_EXPERIENCE_VALUES,
+} from "../constants/productExperiences.js";
 
 const categorySchema = new mongoose.Schema(
   {
@@ -10,6 +14,12 @@ const categorySchema = new mongoose.Schema(
       type: String,
       required: true,
       unique: true
+    },
+    experience: {
+      type: String,
+      enum: PRODUCT_EXPERIENCE_VALUES,
+      default: DEFAULT_PRODUCT_EXPERIENCE,
+      index: true
     },
     subCategories: [
       {
