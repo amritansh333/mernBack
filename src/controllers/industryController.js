@@ -7,7 +7,7 @@ import Product from "../models/Product.js";
  */
 export const getAllIndustries = async (req, res) => {
   try {
-    const industries = await Industry.find().sort({ name: 1 });
+    const industries = await Industry.find().sort({ name: 1 }).lean();
     res.json(industries);
   } catch (err) {
     res.status(500).json({ message: "Failed to fetch industries" });
@@ -23,14 +23,14 @@ export const getIndustryBySlug = async (req, res) => {
     const { slug } = req.params;
 
     // 1. Find industry
-    const industry = await Industry.findOne({ slug });
+    const industry = await Industry.findOne({ slug }).lean();
     if (!industry) {
       return res.status(404).json({ message: "Industry not found" });
     }
 
     const products = await Product.find({
       industries: industry._id
-    }).sort({ order: 1 });
+    }).sort({ order: 1 }).lean();
 
     res.json({
       industry,

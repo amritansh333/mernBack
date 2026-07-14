@@ -80,7 +80,6 @@ const productSchema = new mongoose.Schema(
       type: objectId,
       ref: "Brand",
       default: null,
-      index: true,
     },
 
     path: {
@@ -211,7 +210,12 @@ productSchema.index({
   order: 1,
 });
 
-productSchema.index({ materials: 1 });
-productSchema.index({ industries: 1 });
+productSchema.index({ category: 1, order: 1 });
+productSchema.index({ subCategory: 1, order: 1 });
+productSchema.index({ brand: 1, order: 1 });
+productSchema.index({ materials: 1, order: 1 });
+productSchema.index({ materials: 1, createdAt: -1 });
+productSchema.index({ industries: 1, order: 1 });
+productSchema.index({ industries: 1, createdAt: -1 });
 
 export default mongoose.model("Product", productSchema);

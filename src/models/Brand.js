@@ -31,7 +31,6 @@ const brandSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "SubCategory",
       required: true,
-      index: true,
     },
 
     materials: [
@@ -62,5 +61,6 @@ brandSchema.index({
   subCategory: 1,
   order: 1,
 });
+brandSchema.index({ subCategory: 1, order: 1, name: 1 });
 
 export default mongoose.model("Brand", brandSchema);
