@@ -33,6 +33,9 @@ const emptyFilterResponse = ({ category, material, industry, search }) => ({
   products: [],
 });
 
+/**
+ * Filters legacy Semi Finished products by category, material, industry, and text.
+ */
 export const filterProducts = async ({
   category,
   material,

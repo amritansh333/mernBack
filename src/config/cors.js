@@ -4,8 +4,10 @@ import env from "./env.js";
 const developmentOrigins = [
   "http://localhost:3000",
   "http://localhost:5173",
+  "http://localhost:8080",
   "http://127.0.0.1:3000",
   "http://127.0.0.1:5173",
+  "http://127.0.0.1:8080",
 ];
 
 const allowedOrigins = env.isProduction
@@ -22,7 +24,12 @@ export const corsOptions = {
   },
   credentials: true,
   methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"],
+  allowedHeaders: [
+  "Content-Type",
+  "Authorization",
+  "Cache-Control",
+  "Pragma",
+],
 };
 
 export const corsMiddleware = cors(corsOptions);

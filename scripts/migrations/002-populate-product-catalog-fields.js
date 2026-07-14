@@ -8,7 +8,7 @@ import {
   DEFAULT_PRODUCT_EXPERIENCE,
   PRODUCT_EXPERIENCE_VALUES,
 } from "../../src/constants/productExperiences.js";
-import { buildProductPath } from "../../src/services/PathBuilderService.js";
+import { resolveProductExperience } from "../../src/productExperiences/experienceResolver.js";
 import { toIdString } from "../../src/utils/ids.js";
 
 dotenv.config();
@@ -189,13 +189,27 @@ const buildPatch = ({ product, hierarchy, knownPaths }) => {
   Object.assign(patch, buildSeoPatch(product));
 
   if (isMissingField(product, "path")) {
-    if (category && subCategory) {
-      const generatedPath = buildProductPath({
-        category,
-        subCategory,
-        brand,
-        product,
-      });
+    const resolvedExperience = resolveProductExperience(category);
+    const routingStrategy = resolvedExperience?.routingStrategy;
+
+    if (category && routingStrategy) {
+      let generatedPath = null;
+
+      try {
+        generatedPath = routingStrategy.buildProductPath({
+          category,
+          subCategory,
+          brand,
+          product,
+        });
+      } catch (error) {
+        warnings.push(`path skipped: ${error.message}`);
+      }
+
+      if (!generatedPath) {
+        return { patch, warnings };
+      }
+
       const ownerId = knownPaths.get(generatedPath);
 
       if (ownerId && ownerId !== toIdString(product)) {
@@ -205,7 +219,7 @@ const buildPatch = ({ product, hierarchy, knownPaths }) => {
         knownPaths.set(generatedPath, toIdString(product));
       }
     } else {
-      warnings.push("path skipped: category/subCategory could not be inferred");
+      warnings.push("path skipped: experience routing could not be resolved");
     }
   }
 

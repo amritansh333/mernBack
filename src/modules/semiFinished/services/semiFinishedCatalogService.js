@@ -12,13 +12,22 @@ const semiFinishedFilter = {
 const legacyProductProjection =
   "-experience -category -subCategory -path -downloads -seo -isVisible";
 
+/**
+ * Returns legacy category documents for the original category endpoint.
+ */
 export const getAllCategories = () => Category.find().lean();
 
+/**
+ * Returns categories visible in the Semi Finished product experience.
+ */
 export const getSemiFinishedCategories = () =>
   Category.find(semiFinishedFilter).sort({ order: 1, name: 1 }).lean();
 
 export const getCategoryBySlug = (slug) => Category.findOne({ slug }).lean();
 
+/**
+ * Returns Semi Finished subcategories for a legacy category ObjectId.
+ */
 export const getSubCategoriesByCategoryId = (categoryId) =>
   SubCategory.find({
     category: new mongoose.Types.ObjectId(categoryId),
@@ -27,7 +36,7 @@ export const getSubCategoriesByCategoryId = (categoryId) =>
     .lean();
 
 export const getSubCategoriesByCategorySlug = async (slug) => {
-  const category = await Category.findOne({ slug });
+  const category = await Category.findOne({ slug }).select("_id").lean();
 
   if (!category) {
     return null;
@@ -42,6 +51,9 @@ export const getSubCategoriesByCategorySlug = async (slug) => {
   return { category, subcategories };
 };
 
+/**
+ * Returns Semi Finished brands for a legacy subcategory ObjectId.
+ */
 export const getBrandsBySubCategoryId = (subCategoryId) =>
   Brand.find({
     subCategory: new mongoose.Types.ObjectId(subCategoryId),
@@ -50,7 +62,7 @@ export const getBrandsBySubCategoryId = (subCategoryId) =>
     .lean();
 
 export const getBrandsBySubCategorySlug = async (slug) => {
-  const subCategory = await SubCategory.findOne({ slug });
+  const subCategory = await SubCategory.findOne({ slug }).select("_id").lean();
 
   if (!subCategory) {
     return null;
@@ -65,6 +77,9 @@ export const getBrandsBySubCategorySlug = async (slug) => {
   return { subCategory, brands };
 };
 
+/**
+ * Returns legacy product documents for a Semi Finished brand ObjectId.
+ */
 export const getProductsByBrandId = (brandId) =>
   Product.find({
     brand: new mongoose.Types.ObjectId(brandId),
@@ -77,7 +92,7 @@ export const getProductsByBrandId = (brandId) =>
     .lean();
 
 export const getProductsByBrandSlug = async (slug) => {
-  const brand = await Brand.findOne({ slug });
+  const brand = await Brand.findOne({ slug }).select("_id").lean();
 
   if (!brand) {
     return null;
@@ -96,6 +111,9 @@ export const getProductsByBrandSlug = async (slug) => {
   return { brand, products };
 };
 
+/**
+ * Returns a legacy Semi Finished product document by slug.
+ */
 export const getProductBySlug = (slug) =>
   Product.findOne({ slug })
     .select(legacyProductProjection)
