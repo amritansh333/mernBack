@@ -1,4 +1,4 @@
-import { getMachineComponentsPage } from "../services/machineComponentService.js";
+import { getMachineComponentsPage } from "../services/machineComponentCatalogService.js";
 
 export const getMachineComponents = async (req, res) => {
   try {

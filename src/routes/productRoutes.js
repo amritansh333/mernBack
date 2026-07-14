@@ -1,52 +1,14 @@
 import express from "express";
-import mongoose from "mongoose";
-import Product from "../models/Product.js";
-import { getProductsByBrandSlug } from "../controllers/productController.js";
+import {
+  getProductBySlug,
+  getProductsByBrandId,
+  getProductsByBrandSlug,
+} from "../modules/semiFinished/controllers/semiFinishedCatalogController.js";
 
 const router = express.Router();
 
-/* NEW ROUTE — PRODUCTS BY BRAND SLUG */
 router.get("/by-brand/:slug", getProductsByBrandSlug);
-
-/* OLD ROUTE — PRODUCTS BY BRAND ID */
-router.get("/", async (req, res) => {
-  try {
-    const { brand } = req.query;
-
-    if (!brand) {
-      return res.status(400).json({ message: "Brand ID required" });
-    }
-
-    const products = await Product.find({
-      brand: new mongoose.Types.ObjectId(brand),
-    })
-      .sort({ order: 1 })
-      .populate("brand")
-      .populate("materials")
-      .populate("industries");
-
-    res.json(products);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-});
-
-/* SINGLE PRODUCT BY SLUG */
-router.get("/:slug", async (req, res) => {
-  try {
-    const product = await Product.findOne({ slug: req.params.slug })
-      .populate("brand")
-      .populate("materials")
-      .populate("industries");
-
-    if (!product) {
-      return res.status(404).json({ message: "Product not found" });
-    }
-
-    res.json(product);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-});
+router.get("/", getProductsByBrandId);
+router.get("/:slug", getProductBySlug);
 
 export default router;

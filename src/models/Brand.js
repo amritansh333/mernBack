@@ -1,14 +1,37 @@
 import mongoose from "mongoose";
+import {
+  DEFAULT_PRODUCT_EXPERIENCE,
+  PRODUCT_EXPERIENCE_VALUES,
+} from "../constants/productExperiences.js";
 
 const brandSchema = new mongoose.Schema(
   {
-    name: { type: String, required: true },
-    slug: { type: String, required: true, unique: true },
+    name: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+
+    slug: {
+      type: String,
+      required: true,
+      unique: true,
+      trim: true,
+      lowercase: true,
+    },
+
+    experience: {
+      type: String,
+      enum: PRODUCT_EXPERIENCE_VALUES,
+      default: DEFAULT_PRODUCT_EXPERIENCE,
+      required: true,
+    },
 
     subCategory: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "SubCategory",
       required: true,
+      index: true,
     },
 
     materials: [
@@ -17,13 +40,27 @@ const brandSchema = new mongoose.Schema(
         ref: "Material",
       },
     ],
-    image: String,
+
+    image: {
+      type: String,
+      default: null,
+    },
+
     order: {
       type: Number,
-      default: 99, // Default order if not specified
+      default: 99,
+      min: 0,
     },
   },
-  { timestamps: true }
+  {
+    timestamps: true,
+  }
 );
+
+brandSchema.index({
+  experience: 1,
+  subCategory: 1,
+  order: 1,
+});
 
 export default mongoose.model("Brand", brandSchema);

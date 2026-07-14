@@ -1,5 +1,8 @@
 import express from "express";
-import { getAllCategories, getCategoryBySlug } from "../controllers/categoryController.js";
+import {
+  getAllCategories,
+  getCategoryBySlug,
+} from "../modules/semiFinished/controllers/semiFinishedCatalogController.js";
 
 const router = express.Router();
 

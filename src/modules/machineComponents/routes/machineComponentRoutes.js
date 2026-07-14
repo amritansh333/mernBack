@@ -1,5 +1,5 @@
 import express from "express";
-import { getMachineComponents } from "../controllers/machineComponentController.js";
+import { getMachineComponents } from "../controllers/machineComponentCatalogController.js";
 
 const router = express.Router();
 
