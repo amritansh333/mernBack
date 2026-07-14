@@ -9,16 +9,33 @@ import {
   getSubCategoriesByCategoryId,
   getSubCategoriesByCategorySlug,
 } from "../controllers/semiFinishedCatalogController.js";
+import asyncHandler from "../../../middleware/asyncHandler.js";
+import { validateQueryObjectId } from "../../../middleware/validateObjectId.js";
 
 const router = express.Router();
 
-router.get("/categories", getSemiFinishedCategories);
-router.get("/subcategories/by-category/:slug", getSubCategoriesByCategorySlug);
-router.get("/subcategories", getSubCategoriesByCategoryId);
-router.get("/brands/by-subcategory/:slug", getBrandsBySubCategorySlug);
-router.get("/brands", getBrandsBySubCategoryId);
-router.get("/products/by-brand/:slug", getProductsByBrandSlug);
-router.get("/products", getProductsByBrandId);
-router.get("/products/:slug", getProductBySlug);
+router.get("/categories", asyncHandler(getSemiFinishedCategories));
+router.get(
+  "/subcategories/by-category/:slug",
+  asyncHandler(getSubCategoriesByCategorySlug)
+);
+router.get(
+  "/subcategories",
+  validateQueryObjectId("category", "Category ID"),
+  asyncHandler(getSubCategoriesByCategoryId)
+);
+router.get("/brands/by-subcategory/:slug", asyncHandler(getBrandsBySubCategorySlug));
+router.get(
+  "/brands",
+  validateQueryObjectId("subcategory", "SubCategory ID"),
+  asyncHandler(getBrandsBySubCategoryId)
+);
+router.get("/products/by-brand/:slug", asyncHandler(getProductsByBrandSlug));
+router.get(
+  "/products",
+  validateQueryObjectId("brand", "Brand ID"),
+  asyncHandler(getProductsByBrandId)
+);
+router.get("/products/:slug", asyncHandler(getProductBySlug));
 
 export default router;
