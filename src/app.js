@@ -64,6 +64,11 @@ app.use(
   express.static(path.join(__dirname, "../public/catalogs"))
 );
 
+app.use(
+  "/pdfs",
+  express.static(path.join(__dirname, "../public/pdfs"))
+);
+
 app.use("/api", apiRateLimiter);
 app.use("/api/categories", categoryRoutes);
 app.use("/api/subcategories", subCategoryRoutes);
