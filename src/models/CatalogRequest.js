@@ -27,12 +27,14 @@ const catalogRequestSchema = new mongoose.Schema(
 
     message: {
       type: String,
+      trim: true,
       default: "",
     },
 
     catalog_name: {
       type: String,
       required: true,
+      trim: true,
     },
   },
   {

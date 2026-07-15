@@ -3,10 +3,11 @@ import {
   getAllMaterials,
   getMaterialBySlug
 } from "../controllers/materialController.js";
+import asyncHandler from "../middleware/asyncHandler.js";
 
 const router = express.Router();
 
-router.get("/", getAllMaterials);        // /api/materials
-router.get("/:slug", getMaterialBySlug); // /api/materials/hdpe
+router.get("/", asyncHandler(getAllMaterials));        // /api/materials
+router.get("/:slug", asyncHandler(getMaterialBySlug)); // /api/materials/hdpe
 
 export default router;

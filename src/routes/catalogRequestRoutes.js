@@ -1,5 +1,6 @@
 import express from "express";
 import CatalogRequest from "../models/CatalogRequest.js";
+import asyncHandler from "../middleware/asyncHandler.js";
 
 const router = express.Router();
 
@@ -14,49 +15,49 @@ const catalogPdfMap = {
 };
 
 
-router.post("/", async (req, res) => {
-  try {
-    const { name, phone, email, message, catalog_name } = req.body;
+router.post(
+  "/",
+  asyncHandler(async (req, res) => {
+    try {
+      const { name, phone, email, message, catalog_name } = req.body;
 
-    const data = await CatalogRequest.create({
-      name,
-      phone,
-      email,
-      message,
-      catalog_name,
-    });
+      await CatalogRequest.create({
+        name,
+        phone,
+        email,
+        message,
+        catalog_name,
+      });
 
-    const downloadUrl = catalogPdfMap[catalog_name];
+      const downloadUrl = catalogPdfMap[catalog_name];
 
-if (!downloadUrl) {
-  return res.status(400).json({
-    success: false,
-    message: "Invalid catalog selected",
-  });
-}
+      if (!downloadUrl) {
+        return res.status(400).json({
+          success: false,
+          message: "Invalid catalog selected",
+        });
+      }
 
-res.status(201).json({
-  success: true,
-  downloadUrl: `${process.env.BASE_URL}${downloadUrl}`,
-});
+      return res.status(201).json({
+        success: true,
+        downloadUrl: `${process.env.BASE_URL}${downloadUrl}`,
+      });
+    } catch (err) {
+      // Mongoose validation error
+      if (err.name === "ValidationError") {
+        const firstError = Object.values(err.errors)[0].message;
+        return res.status(400).json({
+          success: false,
+          message: firstError,
+        });
+      }
 
-
-
-  } catch (err) {
-    // Mongoose validation error
-    if (err.name === "ValidationError") {
-      const firstError = Object.values(err.errors)[0].message;
-      return res.status(400).json({
+      return res.status(500).json({
         success: false,
-        message: firstError,
+        message: "Server error",
       });
     }
-
-    res.status(500).json({
-      success: false,
-      message: "Server error",
-    });
-  }
-});
+  })
+);
 
 export default router;

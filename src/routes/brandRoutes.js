@@ -1,30 +1,18 @@
 import express from "express";
-import mongoose from "mongoose";
-import Brand from "../models/Brand.js";
-import { getBrandsBySubCategorySlug } from "../controllers/brandController.js";
+import {
+  getBrandsBySubCategoryId,
+  getBrandsBySubCategorySlug,
+} from "../modules/semiFinished/controllers/semiFinishedCatalogController.js";
+import asyncHandler from "../middleware/asyncHandler.js";
+import { validateQueryObjectId } from "../middleware/validateObjectId.js";
 
 const router = express.Router();
 
-/* NEW ROUTE — USING SLUG */
-router.get("/by-subcategory/:slug", getBrandsBySubCategorySlug);
-
-/* OLD ROUTE — KEEP FOR QUERY SUPPORT */
-router.get("/", async (req, res) => {
-  try {
-    const { subcategory } = req.query;
-
-    if (!subcategory) {
-      return res.status(400).json({ message: "SubCategory ID required" });
-    }
-
-    const brands = await Brand.find({
-      subCategory: new mongoose.Types.ObjectId(subcategory),
-    }).sort({ order: 1 });
-
-    res.json(brands);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-});
+router.get("/by-subcategory/:slug", asyncHandler(getBrandsBySubCategorySlug));
+router.get(
+  "/",
+  validateQueryObjectId("subcategory", "SubCategory ID"),
+  asyncHandler(getBrandsBySubCategoryId)
+);
 
 export default router;

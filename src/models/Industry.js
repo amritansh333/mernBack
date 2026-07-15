@@ -5,24 +5,40 @@ const industrySchema = new mongoose.Schema(
     name: {
       type: String,
       required: true,
-      unique: true
+      unique: true,
+      trim: true,
     },
 
     slug: {
       type: String,
       required: true,
-      unique: true
+      unique: true,
+      trim: true,
+      lowercase: true,
     },
 
     description: {
-      type: String
+      type: String,
+      trim: true,
+      default: "",
     },
 
     seo: {
-      metaTitle: String,
-      metaDescription: String,
-      keywords: [String]
-    }
+      metaTitle: {
+        type: String,
+        trim: true,
+        default: "",
+      },
+      metaDescription: {
+        type: String,
+        trim: true,
+        default: "",
+      },
+      keywords: {
+        type: [String],
+        default: [],
+      },
+    },
   },
   { timestamps: true }
 );
