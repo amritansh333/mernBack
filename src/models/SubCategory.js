@@ -99,6 +99,12 @@ applications: {
   default: [],
 },
 
+specifications: {
+      type: Map,
+      of: mixed,
+      default: {},
+    },
+
 downloads: {
   type: [downloadSchema],
   default: [],
