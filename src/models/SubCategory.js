@@ -4,6 +4,8 @@ import {
   PRODUCT_EXPERIENCE_VALUES,
 } from "../constants/productExperiences.js";
 
+const mixed = mongoose.Schema.Types.Mixed;
+
 const downloadSchema = new mongoose.Schema(
   {
     label: {
