@@ -4,6 +4,40 @@ import {
   PRODUCT_EXPERIENCE_VALUES,
 } from "../constants/productExperiences.js";
 
+const downloadSchema = new mongoose.Schema(
+  {
+    label: {
+      type: String,
+      trim: true,
+    },
+    url: {
+      type: String,
+      trim: true,
+    },
+  },
+  { _id: false }
+);
+
+const seoSchema = new mongoose.Schema(
+  {
+    metaTitle: {
+      type: String,
+      trim: true,
+      default: "",
+    },
+    metaDescription: {
+      type: String,
+      trim: true,
+      default: "",
+    },
+    keywords: {
+      type: [String],
+      default: [],
+    },
+  },
+  { _id: false }
+);
+
 const subCategorySchema = new mongoose.Schema(
   {
     name: {
@@ -37,6 +71,43 @@ const subCategorySchema = new mongoose.Schema(
       type: String,
       default: null,
     },
+
+    heroTitle: {
+  type: String,
+  trim: true,
+  default: "",
+},
+
+heroSubtitle: {
+  type: String,
+  trim: true,
+  default: "",
+},
+
+description: {
+  type: [String],
+  default: [],
+},
+
+technicalCharacteristics: {
+  type: [String],
+  default: [],
+},
+
+applications: {
+  type: [String],
+  default: [],
+},
+
+downloads: {
+  type: [downloadSchema],
+  default: [],
+},
+
+seo: {
+  type: seoSchema,
+  default: () => ({}),
+},
 
     order: {
       type: Number,

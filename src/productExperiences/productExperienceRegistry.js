@@ -21,6 +21,7 @@ const REQUIRED_IMPLEMENTATION_METHODS = Object.freeze([
   "generateSidebar",
   "normalizeProduct",
   "generateCanonicalUrl",
+  
 ]);
 
 const semiFinishedRoutingStrategy = Object.freeze({
@@ -62,6 +63,8 @@ const createProductExperienceImplementation = ({
     generateCanonicalUrl:
       routingStrategy.generateCanonicalUrl || routingStrategy.buildProductPath,
     buildCatalogResponse: routingStrategy.buildCatalogResponse || null,
+    buildSubcategoryResponse:
+  routingStrategy.buildSubcategoryResponse || null,
   });
 
   for (const methodName of REQUIRED_IMPLEMENTATION_METHODS) {

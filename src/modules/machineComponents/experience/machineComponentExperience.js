@@ -107,6 +107,36 @@ const toProductContent = ({ product, brand, subCategory, category }) => {
   };
 };
 
+const buildSubcategoryResponse = ({
+  subCategory,
+  products,
+  category,
+  routingStrategy,
+}) => ({
+  name: subCategory.name,
+  slug: subCategory.slug,
+  path: routingStrategy.buildSubCategoryPath({ subCategory }),
+  image: subCategory.image || "",
+  heroTitle: subCategory.heroTitle || subCategory.name,
+  heroSubtitle: subCategory.heroSubtitle || "",
+  description: subCategory.description || [],
+  applications: subCategory.applications || [],
+  technicalCharacteristics:
+    subCategory.technicalCharacteristics || [],
+  downloads: subCategory.downloads || [],
+  seo: subCategory.seo || {},
+  hierarchy: {
+    category: toReference(category),
+    subCategory: toReference(subCategory),
+  },
+  products: products.map((product) => ({
+    name: product.name,
+    slug: product.slug,
+    path: product.path,
+    image: product.image,
+  })),
+});
+
 export const createMachineComponentExperience = ({ rootPath }) => {
   const routingStrategy = createMachineComponentRoutingStrategy({ rootPath });
 
@@ -161,23 +191,33 @@ export const createMachineComponentExperience = ({ rootPath }) => {
             );
 
             return {
-              ...toReference(subCategory),
-              products: [...directProducts, ...brandedProducts].map(
-                toSidebarProduct
-              ),
-            };
+  ...toReference({
+    ...subCategory,
+    path: routingStrategy.buildSubCategoryPath({
+      subCategory,
+    }),
+  }),
+  products: [...directProducts, ...brandedProducts].map(
+    toSidebarProduct
+  ),
+};
           }
 
           return {
-            ...toReference(subCategory),
-            products: directProducts.map(toSidebarProduct),
-            brands: subCategoryBrands.map((brand) => ({
-              ...toReference(brand),
-              products: (productsByBrand.get(toIdString(brand)) || []).map(
-                toSidebarProduct
-              ),
-            })),
-          };
+  ...toReference({
+    ...subCategory,
+    path: routingStrategy.buildSubCategoryPath({
+      subCategory,
+    }),
+  }),
+  products: directProducts.map(toSidebarProduct),
+  brands: subCategoryBrands.map((brand) => ({
+    ...toReference(brand),
+    products: (productsByBrand.get(toIdString(brand)) || []).map(
+      toSidebarProduct
+    ),
+  })),
+};
         }
       ),
     }));
@@ -249,12 +289,13 @@ export const createMachineComponentExperience = ({ rootPath }) => {
   };
 
   return Object.freeze({
-    ...routingStrategy,
-    resolveCategory,
-    normalizeProduct,
-    generateSidebar,
-    buildCatalogResponse,
-  });
+  ...routingStrategy,
+  resolveCategory,
+  normalizeProduct,
+  generateSidebar,
+  buildCatalogResponse,
+  buildSubcategoryResponse,
+});
 };
 
 export default {
