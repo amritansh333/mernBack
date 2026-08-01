@@ -21,13 +21,13 @@ const REQUIRED_IMPLEMENTATION_METHODS = Object.freeze([
   "generateSidebar",
   "normalizeProduct",
   "generateCanonicalUrl",
-  
 ]);
 
 const semiFinishedRoutingStrategy = Object.freeze({
   type: "semi_finished",
   rootPath: PRODUCT_BASE_PATH,
-  buildCategoryPath: (context) => buildCategoryPath(context?.category || context),
+  buildCategoryPath: (context) =>
+    buildCategoryPath(context?.category || context),
   buildProductPath,
   generateCanonicalUrl: buildProductPath,
 });
@@ -52,19 +52,20 @@ const createProductExperienceImplementation = ({
     priority,
     routingStrategy,
     resolveCategory:
-      routingStrategy.resolveCategory || (({ category = null } = {}) => category),
+      routingStrategy.resolveCategory ||
+      (({ category = null } = {}) => category),
     generateCategoryPath:
       routingStrategy.buildCategoryPath ||
       (({ category }) => buildPath(rootPath, category.slug)),
     generateProductPath: routingStrategy.buildProductPath,
     generateSidebar: routingStrategy.generateSidebar || (() => []),
     normalizeProduct:
-      routingStrategy.normalizeProduct || (({ product = null } = {}) => product),
+      routingStrategy.normalizeProduct ||
+      (({ product = null } = {}) => product),
     generateCanonicalUrl:
       routingStrategy.generateCanonicalUrl || routingStrategy.buildProductPath,
     buildCatalogResponse: routingStrategy.buildCatalogResponse || null,
-    buildSubcategoryResponse:
-  routingStrategy.buildSubcategoryResponse || null,
+    buildSubcategoryResponse: routingStrategy.buildSubcategoryResponse || null,
   });
 
   for (const methodName of REQUIRED_IMPLEMENTATION_METHODS) {
@@ -107,26 +108,24 @@ export const PRODUCT_EXPERIENCE_REGISTRY = Object.freeze([
 ]);
 
 const ENABLED_PRODUCT_EXPERIENCES = Object.freeze(
-  PRODUCT_EXPERIENCE_REGISTRY.filter((entry) => entry.enabled)
+  PRODUCT_EXPERIENCE_REGISTRY.filter((entry) => entry.enabled),
 );
 const ENABLED_PRODUCT_EXPERIENCES_BY_PRIORITY = Object.freeze(
-  [...ENABLED_PRODUCT_EXPERIENCES].sort((a, b) => a.priority - b.priority)
+  [...ENABLED_PRODUCT_EXPERIENCES].sort((a, b) => a.priority - b.priority),
 );
 const PRODUCT_EXPERIENCE_BY_ID = new Map(
-  ENABLED_PRODUCT_EXPERIENCES.map((entry) => [entry.id, entry])
+  ENABLED_PRODUCT_EXPERIENCES.map((entry) => [entry.id, entry]),
 );
 const PRODUCT_EXPERIENCE_BY_EXPERIENCE = new Map(
-  ENABLED_PRODUCT_EXPERIENCES.map((entry) => [entry.experience, entry])
+  ENABLED_PRODUCT_EXPERIENCES.map((entry) => [entry.experience, entry]),
 );
 const PRODUCT_EXPERIENCE_BY_CATEGORY_SLUG = new Map(
-  ENABLED_PRODUCT_EXPERIENCES.filter((entry) => entry.categorySlug).map((entry) => [
-    entry.categorySlug,
-    entry,
-  ])
+  ENABLED_PRODUCT_EXPERIENCES.filter((entry) => entry.categorySlug).map(
+    (entry) => [entry.categorySlug, entry],
+  ),
 );
 
-export const getEnabledProductExperiences = () =>
-  ENABLED_PRODUCT_EXPERIENCES;
+export const getEnabledProductExperiences = () => ENABLED_PRODUCT_EXPERIENCES;
 
 export const getEnabledProductExperiencesByPriority = () =>
   ENABLED_PRODUCT_EXPERIENCES_BY_PRIORITY;

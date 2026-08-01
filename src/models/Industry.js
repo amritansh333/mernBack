@@ -40,7 +40,7 @@ const industrySchema = new mongoose.Schema(
       },
     },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 export default mongoose.model("Industry", industrySchema);

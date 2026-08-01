@@ -17,24 +17,27 @@ const router = express.Router();
 router.get("/categories", asyncHandler(getSemiFinishedCategories));
 router.get(
   "/subcategories/by-category/:slug",
-  asyncHandler(getSubCategoriesByCategorySlug)
+  asyncHandler(getSubCategoriesByCategorySlug),
 );
 router.get(
   "/subcategories",
   validateQueryObjectId("category", "Category ID"),
-  asyncHandler(getSubCategoriesByCategoryId)
+  asyncHandler(getSubCategoriesByCategoryId),
 );
-router.get("/brands/by-subcategory/:slug", asyncHandler(getBrandsBySubCategorySlug));
+router.get(
+  "/brands/by-subcategory/:slug",
+  asyncHandler(getBrandsBySubCategorySlug),
+);
 router.get(
   "/brands",
   validateQueryObjectId("subcategory", "SubCategory ID"),
-  asyncHandler(getBrandsBySubCategoryId)
+  asyncHandler(getBrandsBySubCategoryId),
 );
 router.get("/products/by-brand/:slug", asyncHandler(getProductsByBrandSlug));
 router.get(
   "/products",
   validateQueryObjectId("brand", "Brand ID"),
-  asyncHandler(getProductsByBrandId)
+  asyncHandler(getProductsByBrandId),
 );
 router.get("/products/:slug", asyncHandler(getProductBySlug));
 

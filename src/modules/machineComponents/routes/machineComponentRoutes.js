@@ -9,9 +9,6 @@ const router = express.Router();
 
 router.get("/", asyncHandler(getMachineComponents));
 
-router.get(
-  "/subcategory/:slug",
-  asyncHandler(getMachineComponentSubcategory)
-);
+router.get("/subcategory/:slug", asyncHandler(getMachineComponentSubcategory));
 
 export default router;

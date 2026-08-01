@@ -14,7 +14,6 @@ const catalogPdfMap = {
   Hitech_Brochure: "/catalogs/Hitech_Polymer_Sheets_Catalogue.pdf",
 };
 
-
 router.post(
   "/",
   asyncHandler(async (req, res) => {
@@ -57,7 +56,7 @@ router.post(
         message: "Server error",
       });
     }
-  })
+  }),
 );
 
 export default router;

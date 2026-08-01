@@ -37,7 +37,12 @@ export const buildPath = (...segments) => segments.join("/");
 export const buildCategoryPath = (category) =>
   buildPath(PRODUCT_BASE_PATH, getSlug(category, "Category"));
 
-export const buildProductPath = ({ category, subCategory, brand = null, product }) => {
+export const buildProductPath = ({
+  category,
+  subCategory,
+  brand = null,
+  product,
+}) => {
   const segments = [
     PRODUCT_BASE_PATH,
     getSlug(category, "Category"),

@@ -53,7 +53,7 @@ const brandSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
-  }
+  },
 );
 
 brandSchema.index({

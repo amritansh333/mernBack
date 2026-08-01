@@ -6,13 +6,14 @@ export const getAllCategories = async (req, res) => {
 };
 
 export const getSemiFinishedCategories = async (req, res) => {
-  const categories = await semiFinishedCatalogService.getSemiFinishedCategories();
+  const categories =
+    await semiFinishedCatalogService.getSemiFinishedCategories();
   res.json(categories);
 };
 
 export const getCategoryBySlug = async (req, res) => {
   const category = await semiFinishedCatalogService.getCategoryBySlug(
-    req.params.slug
+    req.params.slug,
   );
 
   if (!category) {
@@ -36,9 +37,10 @@ export const getSubCategoriesByCategoryId = async (req, res) => {
 };
 
 export const getSubCategoriesByCategorySlug = async (req, res) => {
-  const result = await semiFinishedCatalogService.getSubCategoriesByCategorySlug(
-    req.params.slug
-  );
+  const result =
+    await semiFinishedCatalogService.getSubCategoriesByCategorySlug(
+      req.params.slug,
+    );
 
   if (!result) {
     return res.status(404).json({ message: "Category not found" });
@@ -62,7 +64,7 @@ export const getBrandsBySubCategoryId = async (req, res) => {
 
 export const getBrandsBySubCategorySlug = async (req, res) => {
   const result = await semiFinishedCatalogService.getBrandsBySubCategorySlug(
-    req.params.slug
+    req.params.slug,
   );
 
   if (!result) {
@@ -86,7 +88,7 @@ export const getProductsByBrandId = async (req, res) => {
 
 export const getProductsByBrandSlug = async (req, res) => {
   const result = await semiFinishedCatalogService.getProductsByBrandSlug(
-    req.params.slug
+    req.params.slug,
   );
 
   if (!result) {
@@ -98,7 +100,7 @@ export const getProductsByBrandSlug = async (req, res) => {
 
 export const getProductBySlug = async (req, res) => {
   const product = await semiFinishedCatalogService.getProductBySlug(
-    req.params.slug
+    req.params.slug,
   );
 
   if (!product) {

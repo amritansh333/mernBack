@@ -2,7 +2,7 @@ import dns from "node:dns/promises";
 
 try {
   const records = await dns.resolveSrv(
-    "_mongodb._tcp.khanna-polyrib-cluster.jgjntbb.mongodb.net"
+    "_mongodb._tcp.khanna-polyrib-cluster.jgjntbb.mongodb.net",
   );
 
   console.log(records);

@@ -29,7 +29,7 @@ export const errorHandler = (error, req, res, next) => {
         url: req.originalUrl,
       },
     },
-    "Unhandled request error"
+    "Unhandled request error",
   );
 
   return res.status(statusCode).json(payload);

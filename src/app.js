@@ -46,28 +46,25 @@ app.use(hppMiddleware);
 
 app.use(
   "/uploads/brands",
-  express.static(path.join(__dirname, "../public/uploads/brands"))
+  express.static(path.join(__dirname, "../public/uploads/brands")),
 );
 
 app.use(
   "/uploads/products",
-  express.static(path.join(__dirname, "../public/uploads/products"))
+  express.static(path.join(__dirname, "../public/uploads/products")),
 );
 
 app.use(
   "/uploads/subcategories",
-  express.static(path.join(__dirname, "../public/uploads/subcategories"))
+  express.static(path.join(__dirname, "../public/uploads/subcategories")),
 );
 
 app.use(
   "/catalogs",
-  express.static(path.join(__dirname, "../public/catalogs"))
+  express.static(path.join(__dirname, "../public/catalogs")),
 );
 
-app.use(
-  "/pdfs",
-  express.static(path.join(__dirname, "../public/pdfs"))
-);
+app.use("/pdfs", express.static(path.join(__dirname, "../public/pdfs")));
 
 app.use("/api", apiRateLimiter);
 app.use("/api/categories", categoryRoutes);

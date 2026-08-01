@@ -18,7 +18,7 @@ const downloadSchema = new mongoose.Schema(
       trim: true,
     },
   },
-  { _id: false }
+  { _id: false },
 );
 
 const seoSchema = new mongoose.Schema(
@@ -38,7 +38,7 @@ const seoSchema = new mongoose.Schema(
       default: [],
     },
   },
-  { _id: false }
+  { _id: false },
 );
 
 const productSchema = new mongoose.Schema(
@@ -191,7 +191,7 @@ const productSchema = new mongoose.Schema(
       },
     },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 productSchema.index(
@@ -199,7 +199,7 @@ productSchema.index(
   {
     unique: true,
     partialFilterExpression: { path: { $type: "string" } },
-  }
+  },
 );
 
 productSchema.index({

@@ -12,7 +12,7 @@ router.get("/by-category/:slug", asyncHandler(getSubCategoriesByCategorySlug));
 router.get(
   "/",
   validateQueryObjectId("category", "Category ID"),
-  asyncHandler(getSubCategoriesByCategoryId)
+  asyncHandler(getSubCategoriesByCategoryId),
 );
 
 export default router;

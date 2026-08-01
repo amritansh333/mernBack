@@ -29,19 +29,21 @@ const validateRequiredEnv = () => {
   const missing = required.filter((key) => !process.env[key]);
 
   if (missing.length) {
-    throw new Error(`Missing required environment variables: ${missing.join(", ")}`);
+    throw new Error(
+      `Missing required environment variables: ${missing.join(", ")}`,
+    );
   }
 };
 
 const nodeEnv = getEnv("NODE_ENV", "development");
 const isProduction = nodeEnv === "production";
 const corsOrigins = toList(
-  getEnv("CORS_ORIGINS") || getEnv("FRONTEND_URL") || getEnv("CLIENT_URL")
+  getEnv("CORS_ORIGINS") || getEnv("FRONTEND_URL") || getEnv("CLIENT_URL"),
 );
 
 if (isProduction && corsOrigins.length === 0) {
   throw new Error(
-    "CORS_ORIGINS, FRONTEND_URL, or CLIENT_URL must be set in production"
+    "CORS_ORIGINS, FRONTEND_URL, or CLIENT_URL must be set in production",
   );
 }
 

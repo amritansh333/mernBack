@@ -53,7 +53,7 @@ const categorySchema = new mongoose.Schema(
       },
     ],
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 categorySchema.index({ experience: 1, order: 1, name: 1 });

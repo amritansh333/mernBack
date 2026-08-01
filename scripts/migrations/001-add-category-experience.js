@@ -9,7 +9,7 @@ const MACHINE_CATEGORY_SLUGS = new Set(
   (process.env.MACHINE_COMPONENT_CATEGORY_SLUGS || "")
     .split(",")
     .map((slug) => slug.trim())
-    .filter(Boolean)
+    .filter(Boolean),
 );
 
 async function run() {

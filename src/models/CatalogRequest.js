@@ -39,7 +39,7 @@ const catalogRequestSchema = new mongoose.Schema(
   },
   {
     timestamps: { createdAt: "created_at", updatedAt: false },
-  }
+  },
 );
 
 export default mongoose.model("CatalogRequest", catalogRequestSchema);

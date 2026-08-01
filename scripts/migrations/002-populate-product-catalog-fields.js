@@ -53,7 +53,9 @@ const compactDownloads = (downloads) =>
     .filter((download) => download.url);
 
 const buildDownloads = (product) => {
-  const machineDownloads = compactDownloads(product.machineComponentData?.downloads);
+  const machineDownloads = compactDownloads(
+    product.machineComponentData?.downloads,
+  );
 
   if (machineDownloads.length) {
     return machineDownloads;
@@ -91,7 +93,7 @@ const buildSeoPatch = (product) => {
   if (isMissingField(seo, "metaDescription")) {
     const metaDescription = firstText(
       product.description,
-      product.machineComponentData?.description
+      product.machineComponentData?.description,
     ).slice(0, 160);
 
     if (metaDescription) {
@@ -120,8 +122,15 @@ const loadMap = async (Model) => {
   return new Map(documents.map((document) => [toIdString(document), document]));
 };
 
-const inferHierarchy = ({ product, categoriesById, subCategoriesById, brandsById }) => {
-  const brand = product.brand ? brandsById.get(toIdString(product.brand)) : null;
+const inferHierarchy = ({
+  product,
+  categoriesById,
+  subCategoriesById,
+  brandsById,
+}) => {
+  const brand = product.brand
+    ? brandsById.get(toIdString(product.brand))
+    : null;
   const existingSubCategory = product.subCategory
     ? subCategoriesById.get(toIdString(product.subCategory))
     : null;
@@ -243,7 +252,7 @@ async function run() {
     .find({ path: { $type: "string", $ne: "" } }, { projection: { path: 1 } })
     .toArray();
   const knownPaths = new Map(
-    existingPathProducts.map((product) => [product.path, toIdString(product)])
+    existingPathProducts.map((product) => [product.path, toIdString(product)]),
   );
 
   const query = {};
@@ -344,11 +353,11 @@ async function run() {
     console.log("\nOrphan products skipped as obsolete:");
     for (const product of orphanProducts) {
       console.log(
-        `- ${product.name} (${product.slug}) -> missing brand ${product.brand}`
+        `- ${product.name} (${product.slug}) -> missing brand ${product.brand}`,
       );
     }
     console.log(
-      "\nRun npm run migrate:cleanup-orphan-products to preview cleanup."
+      "\nRun npm run migrate:cleanup-orphan-products to preview cleanup.",
     );
   }
 

@@ -13,17 +13,17 @@ export const createMachineComponentRoutingStrategy = ({ rootPath }) => {
     buildPath(normalizedRootPath, getSlug(subCategory, "SubCategory"));
 
   const buildProductPath = ({ subCategory = null, product }) => {
-  // Special case: category landing page
-  if (product?.slug === "thermoplastics-machine-components") {
-    return normalizedRootPath;
-  }
+    // Special case: category landing page
+    if (product?.slug === "thermoplastics-machine-components") {
+      return normalizedRootPath;
+    }
 
-  const basePath = subCategory
-    ? buildSubCategoryPath({ subCategory })
-    : normalizedRootPath;
+    const basePath = subCategory
+      ? buildSubCategoryPath({ subCategory })
+      : normalizedRootPath;
 
-  return buildPath(basePath, getSlug(product, "Product"));
-};
+    return buildPath(basePath, getSlug(product, "Product"));
+  };
 
   return Object.freeze({
     type: "machine_component_hierarchy",

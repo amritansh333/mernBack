@@ -121,8 +121,7 @@ const buildSubcategoryResponse = ({
   heroSubtitle: subCategory.heroSubtitle || "",
   description: subCategory.description || [],
   applications: subCategory.applications || [],
-  technicalCharacteristics:
-    subCategory.technicalCharacteristics || [],
+  technicalCharacteristics: subCategory.technicalCharacteristics || [],
   specifications: toPlainObject(subCategory.specifications),
   downloads: subCategory.downloads || [],
   seo: subCategory.seo || {},
@@ -131,33 +130,41 @@ const buildSubcategoryResponse = ({
     subCategory: toReference(subCategory),
   },
   products: products.map((product) => ({
-  name: product.name,
-  slug: product.slug,
-  path: product.path,
-  image: product.image,
+    name: product.name,
+    slug: product.slug,
+    path: product.path,
+    image: product.image,
 
-  description:
-    Array.isArray(product.description)
+    description: Array.isArray(product.description)
       ? product.description
       : product.description
-      ? [product.description]
-      : [],
+        ? [product.description]
+        : [],
 
-  keyFeatures: product.keyFeatures || [],
-})),
+    keyFeatures: product.keyFeatures || [],
+  })),
 });
 
 export const createMachineComponentExperience = ({ rootPath }) => {
   const routingStrategy = createMachineComponentRoutingStrategy({ rootPath });
 
   const resolveCategory = ({ product, subCategory, categoryById }) =>
-    categoryById.get(toIdString(product.category || subCategory?.category)) || null;
+    categoryById.get(toIdString(product.category || subCategory?.category)) ||
+    null;
 
-  const normalizeProduct = ({ product, brandById, subCategoryById, categoryById }) => {
-    const brand = hasBrand(product) ? brandById.get(toIdString(product.brand)) : null;
+  const normalizeProduct = ({
+    product,
+    brandById,
+    subCategoryById,
+    categoryById,
+  }) => {
+    const brand = hasBrand(product)
+      ? brandById.get(toIdString(product.brand))
+      : null;
     const subCategory =
-      subCategoryById.get(toIdString(product.subCategory || brand?.subCategory)) ||
-      null;
+      subCategoryById.get(
+        toIdString(product.subCategory || brand?.subCategory),
+      ) || null;
     const category = resolveCategory({ product, subCategory, categoryById });
 
     if (!category) {
@@ -188,51 +195,56 @@ export const createMachineComponentExperience = ({ rootPath }) => {
         ...category,
         path: routingStrategy.buildCategoryPath({ category }),
       }),
-      subCategories: (subCategoriesByCategory.get(toIdString(category)) || []).map(
-        (subCategory) => {
-          const subCategoryBrands =
-            brandsBySubCategory.get(toIdString(subCategory)) || [];
-          const directProducts =
-            directProductsBySubCategory.get(toIdString(subCategory)) || [];
+      subCategories: (
+        subCategoriesByCategory.get(toIdString(category)) || []
+      ).map((subCategory) => {
+        const subCategoryBrands =
+          brandsBySubCategory.get(toIdString(subCategory)) || [];
+        const directProducts =
+          directProductsBySubCategory.get(toIdString(subCategory)) || [];
 
-          if (subCategoryBrands.length <= 1) {
-            const brandedProducts = subCategoryBrands.flatMap(
-              (brand) => productsByBrand.get(toIdString(brand)) || []
-            );
-
-            return {
-  ...toReference({
-    ...subCategory,
-    path: routingStrategy.buildSubCategoryPath({
-      subCategory,
-    }),
-  }),
-  products: [...directProducts, ...brandedProducts].map(
-    toSidebarProduct
-  ),
-};
-          }
+        if (subCategoryBrands.length <= 1) {
+          const brandedProducts = subCategoryBrands.flatMap(
+            (brand) => productsByBrand.get(toIdString(brand)) || [],
+          );
 
           return {
-  ...toReference({
-    ...subCategory,
-    path: routingStrategy.buildSubCategoryPath({
-      subCategory,
-    }),
-  }),
-  products: directProducts.map(toSidebarProduct),
-  brands: subCategoryBrands.map((brand) => ({
-    ...toReference(brand),
-    products: (productsByBrand.get(toIdString(brand)) || []).map(
-      toSidebarProduct
-    ),
-  })),
-};
+            ...toReference({
+              ...subCategory,
+              path: routingStrategy.buildSubCategoryPath({
+                subCategory,
+              }),
+            }),
+            products: [...directProducts, ...brandedProducts].map(
+              toSidebarProduct,
+            ),
+          };
         }
-      ),
+
+        return {
+          ...toReference({
+            ...subCategory,
+            path: routingStrategy.buildSubCategoryPath({
+              subCategory,
+            }),
+          }),
+          products: directProducts.map(toSidebarProduct),
+          brands: subCategoryBrands.map((brand) => ({
+            ...toReference(brand),
+            products: (productsByBrand.get(toIdString(brand)) || []).map(
+              toSidebarProduct,
+            ),
+          })),
+        };
+      }),
     }));
 
-  const buildCatalogResponse = ({ categories, subCategories, brands, products }) => {
+  const buildCatalogResponse = ({
+    categories,
+    subCategories,
+    brands,
+    products,
+  }) => {
     if (!categories.length) {
       return {
         sidebar: [],
@@ -242,12 +254,17 @@ export const createMachineComponentExperience = ({ rootPath }) => {
     }
 
     const categoryById = new Map(
-      categories.map((category) => [toIdString(category), category])
+      categories.map((category) => [toIdString(category), category]),
     );
     const subCategoryById = new Map(
-      subCategories.map((subCategory) => [toIdString(subCategory), subCategory])
+      subCategories.map((subCategory) => [
+        toIdString(subCategory),
+        subCategory,
+      ]),
     );
-    const brandById = new Map(brands.map((brand) => [toIdString(brand), brand]));
+    const brandById = new Map(
+      brands.map((brand) => [toIdString(brand), brand]),
+    );
 
     const normalizedRecords = products
       .map((product) =>
@@ -256,25 +273,30 @@ export const createMachineComponentExperience = ({ rootPath }) => {
           brandById,
           subCategoryById,
           categoryById,
-        })
+        }),
       )
       .filter(Boolean);
-    const normalizedProducts = normalizedRecords.map((record) => record.product);
+    const normalizedProducts = normalizedRecords.map(
+      (record) => record.product,
+    );
 
     const subCategoriesByCategory = groupById(
       sortByDisplayOrder(subCategories),
-      (subCategory) => subCategory.category
+      (subCategory) => subCategory.category,
     );
-    const brandsBySubCategory = groupById(sortByDisplayOrder(brands), (brand) =>
-      brand.subCategory
+    const brandsBySubCategory = groupById(
+      sortByDisplayOrder(brands),
+      (brand) => brand.subCategory,
     );
     const productsByBrand = groupById(
       sortByDisplayOrder(normalizedProducts.filter(hasBrand)),
-      (product) => product.brand
+      (product) => product.brand,
     );
     const directProductsBySubCategory = groupById(
-      sortByDisplayOrder(normalizedProducts.filter((product) => !hasBrand(product))),
-      (product) => product.subCategory
+      sortByDisplayOrder(
+        normalizedProducts.filter((product) => !hasBrand(product)),
+      ),
+      (product) => product.subCategory,
     );
 
     const productsBySlug = {};
@@ -299,13 +321,13 @@ export const createMachineComponentExperience = ({ rootPath }) => {
   };
 
   return Object.freeze({
-  ...routingStrategy,
-  resolveCategory,
-  normalizeProduct,
-  generateSidebar,
-  buildCatalogResponse,
-  buildSubcategoryResponse,
-});
+    ...routingStrategy,
+    resolveCategory,
+    normalizeProduct,
+    generateSidebar,
+    buildCatalogResponse,
+    buildSubcategoryResponse,
+  });
 };
 
 export default {

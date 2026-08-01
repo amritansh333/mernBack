@@ -39,7 +39,7 @@ const enquirySchema = new mongoose.Schema(
       trim: true,
     },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 export default mongoose.model("Enquiry", enquirySchema);

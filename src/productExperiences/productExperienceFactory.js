@@ -32,7 +32,7 @@ export const resolveProductExperienceImplementation = (category) => {
     slugMatch ||
     getEnabledProductExperiencesByPriority().find(
       (entry) =>
-        entry.categorySlug === null && entry.experience === category.experience
+        entry.categorySlug === null && entry.experience === category.experience,
     );
 
   return getImplementation(experienceMatch);

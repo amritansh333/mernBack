@@ -6,13 +6,10 @@ import { PRODUCT_EXPERIENCE_IDS } from "../../../productExperiences/productExper
 import { getProductExperienceImplementation } from "../../../productExperiences/productExperienceFactory.js";
 
 const machineExperienceImplementation = getProductExperienceImplementation(
-  PRODUCT_EXPERIENCE_IDS.MACHINE_COMPONENTS
+  PRODUCT_EXPERIENCE_IDS.MACHINE_COMPONENTS,
 );
 
-const {
-  normalizeProduct,
-  
-} = machineExperienceImplementation;
+const { normalizeProduct } = machineExperienceImplementation;
 
 if (!machineExperienceImplementation?.buildCatalogResponse) {
   throw new Error("Machine Components product experience is not registered");
@@ -94,7 +91,7 @@ export const getMachineComponentsPage = async () => {
     ],
   })
     .select(
-      "name slug path order category subCategory brand description keyFeatures applications specifications downloads pdfUrl image machineComponentData materials industries"
+      "name slug path order category subCategory brand description keyFeatures applications specifications downloads pdfUrl image machineComponentData materials industries",
     )
     .populate("materials", "name slug")
     .populate("industries", "name slug")
@@ -143,10 +140,7 @@ export const getMachineComponentSubcategoryPage = async (slug) => {
   const products = await Product.find({
     isVisible: { $ne: false },
     "machineComponentData.isVisible": { $ne: false },
-    $or: [
-      { subCategory: subCategory._id },
-      { brand: { $in: brandIds } },
-    ],
+    $or: [{ subCategory: subCategory._id }, { brand: { $in: brandIds } }],
   })
     .populate("materials", "name slug")
     .populate("industries", "name slug")
@@ -154,9 +148,7 @@ export const getMachineComponentSubcategoryPage = async (slug) => {
 
   const categoryById = new Map([[String(category._id), category]]);
   const subCategoryById = new Map([[String(subCategory._id), subCategory]]);
-  const brandById = new Map(
-    brands.map((brand) => [String(brand._id), brand])
-  );
+  const brandById = new Map(brands.map((brand) => [String(brand._id), brand]));
 
   const normalizedProducts = products
     .map((product) =>
@@ -165,7 +157,7 @@ export const getMachineComponentSubcategoryPage = async (slug) => {
         brandById,
         subCategoryById,
         categoryById,
-      })
+      }),
     )
     .filter(Boolean);
 

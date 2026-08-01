@@ -9,7 +9,7 @@ dotenv.config();
 const args = new Set(process.argv.slice(2));
 const shouldApply = args.has("--apply");
 const confirmationArg = process.argv.find((arg) =>
-  arg.startsWith("--confirm=")
+  arg.startsWith("--confirm="),
 );
 const confirmation = confirmationArg ? confirmationArg.split("=")[1] : "";
 const requiredConfirmation = "delete-orphan-products";
@@ -28,7 +28,7 @@ const findOrphanProducts = async (brandIds) => {
     .lean();
 
   return productsWithBrand.filter(
-    (product) => !brandIds.has(toIdString(product.brand))
+    (product) => !brandIds.has(toIdString(product.brand)),
   );
 };
 
@@ -60,22 +60,22 @@ async function run() {
     for (const product of orphanProducts) {
       console.log(
         `- ${product.name} (${product.slug}) -> missing brand ${toIdString(
-          product.brand
-        )}`
+          product.brand,
+        )}`,
       );
     }
   }
 
   if (!shouldApply) {
     console.log(
-      "\nDry run only. Re-run with --apply --confirm=delete-orphan-products to delete these products."
+      "\nDry run only. Re-run with --apply --confirm=delete-orphan-products to delete these products.",
     );
     return;
   }
 
   if (confirmation !== requiredConfirmation) {
     throw new Error(
-      `Refusing to delete. Pass --confirm=${requiredConfirmation} with --apply.`
+      `Refusing to delete. Pass --confirm=${requiredConfirmation} with --apply.`,
     );
   }
 
@@ -92,8 +92,8 @@ async function run() {
         deletedProducts: result.deletedCount,
       },
       null,
-      2
-    )
+      2,
+    ),
   );
 }
 

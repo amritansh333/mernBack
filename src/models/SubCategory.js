@@ -17,7 +17,7 @@ const downloadSchema = new mongoose.Schema(
       trim: true,
     },
   },
-  { _id: false }
+  { _id: false },
 );
 
 const seoSchema = new mongoose.Schema(
@@ -37,7 +37,7 @@ const seoSchema = new mongoose.Schema(
       default: [],
     },
   },
-  { _id: false }
+  { _id: false },
 );
 
 const subCategorySchema = new mongoose.Schema(
@@ -75,47 +75,47 @@ const subCategorySchema = new mongoose.Schema(
     },
 
     heroTitle: {
-  type: String,
-  trim: true,
-  default: "",
-},
+      type: String,
+      trim: true,
+      default: "",
+    },
 
-heroSubtitle: {
-  type: String,
-  trim: true,
-  default: "",
-},
+    heroSubtitle: {
+      type: String,
+      trim: true,
+      default: "",
+    },
 
-description: {
-  type: [String],
-  default: [],
-},
+    description: {
+      type: [String],
+      default: [],
+    },
 
-technicalCharacteristics: {
-  type: [String],
-  default: [],
-},
+    technicalCharacteristics: {
+      type: [String],
+      default: [],
+    },
 
-applications: {
-  type: [String],
-  default: [],
-},
+    applications: {
+      type: [String],
+      default: [],
+    },
 
-specifications: {
+    specifications: {
       type: Map,
       of: mixed,
       default: {},
     },
 
-downloads: {
-  type: [downloadSchema],
-  default: [],
-},
+    downloads: {
+      type: [downloadSchema],
+      default: [],
+    },
 
-seo: {
-  type: seoSchema,
-  default: () => ({}),
-},
+    seo: {
+      type: seoSchema,
+      default: () => ({}),
+    },
 
     order: {
       type: Number,
@@ -125,7 +125,7 @@ seo: {
   },
   {
     timestamps: true,
-  }
+  },
 );
 
 subCategorySchema.index({

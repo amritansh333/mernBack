@@ -13,7 +13,7 @@ router.get("/by-brand/:slug", asyncHandler(getProductsByBrandSlug));
 router.get(
   "/",
   validateQueryObjectId("brand", "Brand ID"),
-  asyncHandler(getProductsByBrandId)
+  asyncHandler(getProductsByBrandId),
 );
 router.get("/:slug", asyncHandler(getProductBySlug));
 
