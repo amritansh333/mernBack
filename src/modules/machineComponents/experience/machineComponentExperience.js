@@ -131,11 +131,20 @@ const buildSubcategoryResponse = ({
     subCategory: toReference(subCategory),
   },
   products: products.map((product) => ({
-    name: product.name,
-    slug: product.slug,
-    path: product.path,
-    image: product.image,
-  })),
+  name: product.name,
+  slug: product.slug,
+  path: product.path,
+  image: product.image,
+
+  description:
+    Array.isArray(product.description)
+      ? product.description
+      : product.description
+      ? [product.description]
+      : [],
+
+  keyFeatures: product.keyFeatures || [],
+})),
 });
 
 export const createMachineComponentExperience = ({ rootPath }) => {
