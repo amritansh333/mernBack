@@ -45,6 +45,12 @@ const brandSchema = new mongoose.Schema(
       default: null,
     },
 
+    description: {
+      type: String,
+      trim: true,
+      default: "",
+    },
+
     order: {
       type: Number,
       default: 99,

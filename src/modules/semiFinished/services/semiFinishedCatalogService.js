@@ -62,19 +62,22 @@ export const getBrandsBySubCategoryId = (subCategoryId) =>
     .lean();
 
 export const getBrandsBySubCategorySlug = async (slug) => {
-  const subCategory = await SubCategory.findOne({ slug }).select("_id").lean();
+  const subcategory = await SubCategory.findOne({ slug }).lean();
 
-  if (!subCategory) {
+  if (!subcategory) {
     return null;
   }
 
   const brands = await Brand.find({
-    subCategory: subCategory._id,
+    subCategory: subcategory._id,
   })
     .sort({ order: 1 })
     .lean();
 
-  return { subCategory, brands };
+  return {
+    subcategory,
+    brands,
+  };
 };
 
 /**
@@ -92,7 +95,7 @@ export const getProductsByBrandId = (brandId) =>
     .lean();
 
 export const getProductsByBrandSlug = async (slug) => {
-  const brand = await Brand.findOne({ slug }).select("_id").lean();
+  const brand = await Brand.findOne({ slug }).lean();
 
   if (!brand) {
     return null;
@@ -114,13 +117,25 @@ export const getProductsByBrandSlug = async (slug) => {
 /**
  * Returns a legacy Semi Finished product document by slug.
  */
-export const getProductBySlug = (slug) =>
-  Product.findOne({ slug })
+export const getProductBySlug = async (slug) => {
+  const product = await Product.findOne({ slug })
     .select(legacyProductProjection)
     .populate("brand")
     .populate("materials")
     .populate("industries")
     .lean();
+
+  if (!product) {
+    return null;
+  }
+
+  const brand = await Brand.findById(product.brand._id).lean();
+
+  return {
+    brand,
+    product,
+  };
+};
 
 export default {
   getAllCategories,

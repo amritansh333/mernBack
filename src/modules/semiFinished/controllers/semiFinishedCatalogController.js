@@ -71,7 +71,10 @@ export const getBrandsBySubCategorySlug = async (req, res) => {
     return res.status(404).json({ message: "SubCategory not found" });
   }
 
-  return res.json(result.brands);
+  return res.json({
+    subcategory: result.subcategory,
+    brands: result.brands,
+  });
 };
 
 export const getProductsByBrandId = async (req, res) => {
@@ -95,17 +98,23 @@ export const getProductsByBrandSlug = async (req, res) => {
     return res.status(404).json({ message: "Brand not found" });
   }
 
-  return res.json(result.products);
+  return res.json({
+    brand: result.brand,
+    products: result.products,
+  });
 };
 
 export const getProductBySlug = async (req, res) => {
-  const product = await semiFinishedCatalogService.getProductBySlug(
+  const result = await semiFinishedCatalogService.getProductBySlug(
     req.params.slug,
   );
 
-  if (!product) {
+  if (!result) {
     return res.status(404).json({ message: "Product not found" });
   }
 
-  return res.json(product);
+  return res.json({
+    brand: result.brand,
+    product: result.product,
+  });
 };
