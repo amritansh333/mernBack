@@ -32,11 +32,26 @@ const otpSessionSchema = new mongoose.Schema(
       default: false,
     },
 
-    sessionToken: {
+    verifiedAt: {
+      type: Date,
+      default: null,
+    },
+
+    sessionTokenHash: {
       type: String,
+      default: undefined,
+    },
+
+    resendCount: {
+      type: Number,
       required: true,
-      unique: true,
-      index: true,
+      default: 0,
+      min: 0,
+    },
+
+    resendWindowStartedAt: {
+      type: Date,
+      default: null,
     },
   },
   { timestamps: true },
@@ -44,5 +59,6 @@ const otpSessionSchema = new mongoose.Schema(
 
 otpSessionSchema.index({ expiresAt: 1 }, { expireAfterSeconds: 0 });
 otpSessionSchema.index({ leadId: 1, verified: 1, expiresAt: 1 });
+otpSessionSchema.index({ sessionTokenHash: 1 }, { unique: true, sparse: true });
 
 export default mongoose.model("OtpSession", otpSessionSchema);

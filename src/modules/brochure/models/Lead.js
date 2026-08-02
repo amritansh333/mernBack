@@ -79,6 +79,11 @@ const leadSchema = new mongoose.Schema(
       type: Date,
       default: null,
     },
+
+    lastDownloadedAt: {
+      type: Date,
+      default: null,
+    },
   },
   { timestamps: true },
 );
