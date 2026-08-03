@@ -72,22 +72,28 @@ const toProductContent = ({ product, brand, subCategory, category }) => {
   const productSpecifications = toPlainObject(product.specifications);
 
   return {
+    _id: String(product._id),
+
     name: product.name,
     slug: product.slug,
     path: product.path,
     image: product.image || "",
+
     description:
       machineData.description?.length > 0
         ? machineData.description
         : product.description || [],
+
     applications:
       machineData.applications?.length > 0
         ? machineData.applications
         : product.applications || [],
+
     specifications:
       Object.keys(machineSpecifications).length > 0
         ? machineSpecifications
         : productSpecifications,
+
     downloads:
       machineData.downloads?.length > 0
         ? machineData.downloads
@@ -96,9 +102,12 @@ const toProductContent = ({ product, brand, subCategory, category }) => {
           : product.pdfUrl
             ? [{ label: "Product PDF", url: product.pdfUrl }]
             : [],
+
     keyFeatures: product.keyFeatures || [],
+
     materials: (product.materials || []).map(toReference),
     industries: (product.industries || []).map(toReference),
+
     hierarchy: {
       category: toReference(category),
       subCategory: toReference(subCategory),
