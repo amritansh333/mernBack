@@ -1,13 +1,15 @@
 import env from "../../../config/env.js";
+import Product from "../../../models/Product.js";
 import Lead from "../models/Lead.js";
 import OtpSession from "../models/OtpSession.js";
 import {
+  createBrochureJwt,
+  generateSessionId,
   generateOTP,
-  generateSessionToken,
-  hashSessionToken,
   hashOTP,
-  timingSafeHashCompare,
+  verifyOTPHash,
 } from "../services/brochureService.js";
+import { validateBrochureSession } from "../middleware/requireBrochureSession.js";
 import {
   validateDownloadParams,
   validateRequestOtpBody,
@@ -15,16 +17,63 @@ import {
   validateVerifyOtpBody,
 } from "../validators/requestOtpValidator.js";
 
-const OTP_EXPIRY_MINUTES = 5;
-const MAX_OTP_ATTEMPTS = 5;
 const MAX_RESEND_REQUESTS = 3;
 const RESEND_WINDOW_MINUTES = 15;
 
 const getOtpExpiresAt = () =>
-  new Date(Date.now() + OTP_EXPIRY_MINUTES * 60 * 1000);
+  new Date(Date.now() + env.brochureOtpExpiryMinutes * 60 * 1000);
 
-const deleteExpiredSessions = () =>
-  OtpSession.deleteMany({ expiresAt: { $lte: new Date() } });
+const getSessionExpiresAt = () =>
+  new Date(Date.now() + env.brochureSessionMaxAgeMs);
+
+const deleteExpiredSessions = () => {
+  const now = new Date();
+
+  return OtpSession.deleteMany({
+    $or: [
+      { cleanupAt: { $lte: now } },
+      { verified: false, expiresAt: { $lte: now } },
+      {
+        verified: true,
+        cleanupAt: { $exists: false },
+        expiresAt: { $lte: now },
+      },
+    ],
+  });
+};
+
+const setBrochureSessionCookie = (res, jwt) => {
+  res.cookie(env.brochureSessionCookieName, jwt, {
+    httpOnly: true,
+    secure: env.isProduction,
+    sameSite: "lax",
+    path: "/",
+    maxAge: env.brochureSessionMaxAgeMs,
+  });
+};
+
+const logDevelopmentOtp = ({ lead, otp, expiresAt }) => {
+  if (env.isProduction) {
+    return;
+  }
+
+  console.log(`
+====================================================
+
+BROCHURE OTP
+
+Lead: ${lead.firstName} ${lead.lastName}
+Product: ${lead.productName}
+Email: ${lead.email}
+Mobile: ${lead.mobileNumber}
+
+OTP: ${otp}
+
+Expires: ${expiresAt.toISOString()}
+
+====================================================
+`);
+};
 
 const findLatestSessionByMobileNumber = async (mobileNumber) => {
   const leads = await Lead.find({ mobileNumber }).select("_id").lean();
@@ -92,7 +141,7 @@ export const requestOtp = async (req, res) => {
   );
 
   const otp = generateOTP();
-  const otpHash = hashOTP(otp);
+  const otpHash = await hashOTP(otp);
   const expiresAt = getOtpExpiresAt();
 
   await OtpSession.deleteMany({
@@ -107,19 +156,16 @@ export const requestOtp = async (req, res) => {
     expiresAt,
     attempts: 0,
     verified: false,
+    cleanupAt: expiresAt,
   });
 
-  const response = {
+  logDevelopmentOtp({ lead, otp, expiresAt });
+
+  return res.status(201).json({
     success: true,
     message: "OTP generated successfully",
     expiresAt,
-  };
-
-  if (!env.isProduction) {
-    response.otp = otp;
-  }
-
-  return res.status(201).json(response);
+  });
 };
 
 export const verifyOtp = async (req, res) => {
@@ -145,59 +191,70 @@ export const verifyOtp = async (req, res) => {
   if (session.expiresAt <= new Date()) {
     await OtpSession.deleteOne({ _id: session._id });
 
-    return res.status(409).json({
+    return res.status(401).json({
       success: false,
       message: "OTP session expired",
     });
   }
 
   if (session.verified) {
-    return res.status(409).json({
+    return res.status(403).json({
       success: false,
       message: "OTP session already verified",
     });
   }
 
-  if (session.attempts >= MAX_OTP_ATTEMPTS) {
+  if (session.attempts >= env.brochureOtpMaxAttempts) {
     return res.status(429).json({
       success: false,
       message: "Maximum OTP attempts exceeded",
     });
   }
 
-  const incomingOtpHash = hashOTP(data.otp);
-  const isValidOtp = timingSafeHashCompare(incomingOtpHash, session.otpHash);
+  const isValidOtp = await verifyOTPHash(data.otp, session.otpHash);
 
   if (!isValidOtp) {
     session.attempts += 1;
+    session.cleanupAt = session.cleanupAt || session.expiresAt;
     await session.save();
 
     return res.status(401).json({
       success: false,
       message: "Invalid OTP",
-      attemptsRemaining: Math.max(0, MAX_OTP_ATTEMPTS - session.attempts),
     });
   }
 
-  const rawSessionToken = generateSessionToken();
-  const sessionTokenHash = hashSessionToken(rawSessionToken);
   const verifiedAt = new Date();
+  const sessionId = generateSessionId();
+  const sessionExpiresAt = getSessionExpiresAt();
+  const jwt = createBrochureJwt({
+    leadId: session.leadId._id,
+    sessionId,
+    expiresAt: sessionExpiresAt,
+  });
 
   session.verified = true;
   session.verifiedAt = verifiedAt;
-  session.sessionTokenHash = sessionTokenHash;
+  session.sessionId = sessionId;
+  session.sessionExpiresAt = sessionExpiresAt;
+  session.cleanupAt = sessionExpiresAt;
+  session.lastVerificationIp = req.ip || "";
+  session.lastVerificationUserAgent = req.get("User-Agent") || "";
   await session.save();
 
   await Lead.updateOne(
     { _id: session.leadId._id },
     {
-      status: "verified",
+      status: "otp_verified",
       verifiedAt,
     },
   );
 
+  setBrochureSessionCookie(res, jwt);
+
   return res.status(200).json({
-    sessionToken: rawSessionToken,
+    success: true,
+    message: "Verification successful",
   });
 };
 
@@ -224,14 +281,14 @@ export const resendOtp = async (req, res) => {
   if (session.expiresAt <= new Date()) {
     await OtpSession.deleteOne({ _id: session._id });
 
-    return res.status(409).json({
+    return res.status(401).json({
       success: false,
       message: "OTP session expired",
     });
   }
 
   if (session.verified) {
-    return res.status(409).json({
+    return res.status(403).json({
       success: false,
       message: "OTP session already verified",
     });
@@ -247,7 +304,7 @@ export const resendOtp = async (req, res) => {
   }
 
   const otp = generateOTP();
-  const otpHash = hashOTP(otp);
+  const otpHash = await hashOTP(otp);
   const expiresAt = getOtpExpiresAt();
 
   await OtpSession.deleteMany({
@@ -261,21 +318,32 @@ export const resendOtp = async (req, res) => {
     expiresAt,
     attempts: 0,
     verified: false,
+    cleanupAt: expiresAt,
     resendCount: resendState.resendCount,
     resendWindowStartedAt: resendState.resendWindowStartedAt,
   });
 
-  const response = {
+  logDevelopmentOtp({ lead: session.leadId, otp, expiresAt });
+
+  return res.status(201).json({
     success: true,
     message: "OTP resent successfully",
     expiresAt,
-  };
+  });
+};
 
-  if (!env.isProduction) {
-    response.otp = otp;
+export const checkBrochureSession = async (req, res) => {
+  const session = await validateBrochureSession(req, res);
+
+  if (!session.authenticated) {
+    return res.status(401).json({
+      authenticated: false,
+    });
   }
 
-  return res.status(201).json(response);
+  return res.status(200).json({
+    authenticated: true,
+  });
 };
 
 export const downloadBrochure = async (req, res) => {
@@ -290,17 +358,30 @@ export const downloadBrochure = async (req, res) => {
   }
 
   const lead = req.brochureLead;
+  const downloadedAt = new Date();
+  const product = await Product.findOne({ slug: data.productSlug })
+    .select("_id slug name")
+    .lean();
 
-  if (lead.productSlug !== data.productSlug) {
-    return res.status(403).json({
+  if (!product) {
+    return res.status(404).json({
       success: false,
-      message: "Brochure session does not match requested product",
+      message: "Product not found",
     });
   }
 
   lead.downloadCount += 1;
   lead.status = "download_authorized";
-  lead.lastDownloadedAt = new Date();
+  lead.lastDownloadedAt = downloadedAt;
+  lead.downloadHistory.push({
+    productId: String(product._id),
+    productSlug: product.slug,
+    productName: product.name,
+    downloadedAt,
+    sessionId: req.brochureSessionId,
+    ip: req.ip || "",
+    userAgent: req.get("User-Agent") || "",
+  });
   await lead.save();
 
   return res.status(200).json({

@@ -24,7 +24,7 @@ export const corsOptions = {
   },
   credentials: true,
   methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization", "Cache-Control", "Pragma"],
+  allowedHeaders: ["Content-Type", "Cache-Control", "Pragma"],
 };
 
 export const corsMiddleware = cors(corsOptions);

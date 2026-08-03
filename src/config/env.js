@@ -2,8 +2,6 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-const required = ["MONGO_URI"];
-
 const getEnv = (key, fallback = "") => process.env[key] || fallback;
 
 const toNumber = (value, fallback) => {
@@ -25,7 +23,7 @@ const toList = (value) =>
     .map((item) => item.trim())
     .filter(Boolean);
 
-const validateRequiredEnv = () => {
+const validateRequiredEnv = (required) => {
   const missing = required.filter((key) => !process.env[key]);
 
   if (missing.length) {
@@ -37,6 +35,7 @@ const validateRequiredEnv = () => {
 
 const nodeEnv = getEnv("NODE_ENV", "development");
 const isProduction = nodeEnv === "production";
+const required = ["MONGO_URI", ...(isProduction ? ["BROCHURE_JWT_SECRET"] : [])];
 const corsOrigins = toList(
   getEnv("CORS_ORIGINS") || getEnv("FRONTEND_URL") || getEnv("CLIENT_URL"),
 );
@@ -47,7 +46,7 @@ if (isProduction && corsOrigins.length === 0) {
   );
 }
 
-validateRequiredEnv();
+validateRequiredEnv(required);
 
 const env = Object.freeze({
   nodeEnv,
@@ -59,6 +58,17 @@ const env = Object.freeze({
   bodyLimit: getEnv("BODY_LIMIT", "1mb"),
   rateLimitWindowMs: toNumber(getEnv("RATE_LIMIT_WINDOW_MS"), 15 * 60 * 1000),
   rateLimitMax: toNumber(getEnv("RATE_LIMIT_MAX"), 300),
+  brochureJwtSecret: getEnv("BROCHURE_JWT_SECRET"),
+  brochureSessionCookieName: getEnv(
+    "BROCHURE_SESSION_COOKIE_NAME",
+    "brochure_session",
+  ),
+  brochureSessionMaxAgeMs: toNumber(
+    getEnv("BROCHURE_SESSION_MAX_AGE_MS"),
+    24 * 60 * 60 * 1000,
+  ),
+  brochureOtpExpiryMinutes: toNumber(getEnv("BROCHURE_OTP_EXPIRY_MINUTES"), 5),
+  brochureOtpMaxAttempts: toNumber(getEnv("BROCHURE_OTP_MAX_ATTEMPTS"), 5),
   trustProxy: toNumber(getEnv("TRUST_PROXY"), 1),
   logLevel: getEnv("LOG_LEVEL", isProduction ? "info" : "debug"),
   logRequests: toBoolean(getEnv("LOG_REQUESTS"), true),
