@@ -29,9 +29,9 @@ export const clearBrochureSessionCookie = (res) => {
   res.clearCookie(env.brochureSessionCookieName, {
     httpOnly: true,
     secure: env.isProduction,
-    sameSite: "lax",
+    sameSite: env.isProduction ? "none" : "lax",
     path: "/",
-  });
+});
 };
 
 export const validateBrochureSession = async (req, res) => {
