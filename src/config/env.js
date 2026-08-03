@@ -72,6 +72,7 @@ const env = Object.freeze({
   trustProxy: toNumber(getEnv("TRUST_PROXY"), 1),
   logLevel: getEnv("LOG_LEVEL", isProduction ? "info" : "debug"),
   logRequests: toBoolean(getEnv("LOG_REQUESTS"), true),
+  otpLogging: toBoolean(getEnv("OTP_LOGGING"), !isProduction),
 });
 
 export default env;
