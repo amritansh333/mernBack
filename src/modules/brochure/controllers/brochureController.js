@@ -26,6 +26,18 @@ const getOtpExpiresAt = () =>
 const getSessionExpiresAt = () =>
   new Date(Date.now() + env.brochureSessionMaxAgeMs);
 
+const formatIndianTime = (date) =>
+  new Intl.DateTimeFormat("en-IN", {
+    timeZone: "Asia/Kolkata",
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: true,
+  }).format(date);
+
 const deleteExpiredSessions = () => {
   const now = new Date();
 
@@ -69,7 +81,7 @@ Mobile: ${lead.mobileNumber}
 
 OTP: ${otp}
 
-Expires: ${expiresAt.toISOString()}
+Expires: ${formatIndianTime(expiresAt)} IST
 
 ====================================================
 `);
