@@ -26,6 +26,9 @@ import industryRoutes from "./routes/industryRoutes.js";
 import materialRoutes from "./routes/materialRoutes.js";
 import enquiryRoutes from "./routes/enquiryRoutes.js";
 
+// Admin routes
+import adminModule from "./modules/admin/index.js";
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -81,6 +84,9 @@ app.use("/api/industries", industryRoutes);
 app.use("/api/materials", materialRoutes);
 app.use("/api/enquiries", enquiryRoutes);
 app.use("/api/catalogrequests", catalogRoutes);
+
+// Admin APIs (do not interfere with public routes)
+app.use("/api/admin", adminModule);
 
 app.use(notFound);
 app.use(errorHandler);
