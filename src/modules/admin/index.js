@@ -13,6 +13,8 @@ import brochureRoutes from "./brochure-downloads/routes.js";
 import drawingRequestsRoutes from "./drawing-requests/routes.js";
 import quoteRequestsRoutes from "./quote-requests/routes.js";
 import mediaLibraryRoutes from "./media-library/routes.js";
+import contentRoutes from "./content/routes.js";
+import usersRoutes from "./users/routes.js";
 
 const router = express.Router();
 
@@ -28,6 +30,8 @@ router.use("/brochure-downloads", brochureRoutes);
 router.use("/drawing-requests", drawingRequestsRoutes);
 router.use("/quote-requests", quoteRequestsRoutes);
 router.use("/media-library", mediaLibraryRoutes);
+router.use("/content", contentRoutes);
+router.use("/users", usersRoutes);
 router.use("/uploads", uploadsRoutes);
 router.use("/auth", authRoutes);
 
