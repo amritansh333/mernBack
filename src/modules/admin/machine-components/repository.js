@@ -13,7 +13,7 @@ const mcSchema = new Schema(
     isVisible: { type: Boolean, default: true },
     image: { type: String, default: "" },
   },
-  { timestamps: true, collection: "machinecomponents_admin" },
+  { timestamps: true },
 );
 
 const Model = mongoose.models.MachineComponentAdmin || mongoose.model("MachineComponentAdmin", mcSchema);

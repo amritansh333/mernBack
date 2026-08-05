@@ -1,3 +1,4 @@
+import Product from "../../../models/Product.js";
 import * as repo from "./repository.js";
 import * as productsRepo from "../products/repository.js";
 import { serializeMaterial, serializeList } from "./serializer.js";

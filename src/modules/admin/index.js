@@ -7,6 +7,12 @@ import machineComponentsRoutes from "./machine-components/routes.js";
 import dashboardRoutes from "./dashboard/routes.js";
 import uploadsRoutes from "./uploads/routes.js";
 import authRoutes from "./auth/routes.js";
+import searchRoutes from "./search/routes.js";
+import leadsRoutes from "./leads/routes.js";
+import brochureRoutes from "./brochure-downloads/routes.js";
+import drawingRequestsRoutes from "./drawing-requests/routes.js";
+import quoteRequestsRoutes from "./quote-requests/routes.js";
+import mediaLibraryRoutes from "./media-library/routes.js";
 
 const router = express.Router();
 
@@ -16,6 +22,12 @@ router.use("/brands", brandsRoutes);
 router.use("/materials", materialsRoutes);
 router.use("/machine-components", machineComponentsRoutes);
 router.use("/dashboard", dashboardRoutes);
+router.use("/search", searchRoutes);
+router.use("/leads", leadsRoutes);
+router.use("/brochure-downloads", brochureRoutes);
+router.use("/drawing-requests", drawingRequestsRoutes);
+router.use("/quote-requests", quoteRequestsRoutes);
+router.use("/media-library", mediaLibraryRoutes);
 router.use("/uploads", uploadsRoutes);
 router.use("/auth", authRoutes);
 
