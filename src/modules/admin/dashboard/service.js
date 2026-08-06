@@ -12,7 +12,7 @@ export const getDashboard = async () => {
     totalBrochureDownloads,
     totalLeads,
     totalDrawingRequests,
-    totalQuoteRequests,
+    totalEnquiries,
     totalMediaLibrary,
     totalUsers,
     totalRoles,
@@ -26,18 +26,19 @@ export const getDashboard = async () => {
     repo.countBrochureDownloads(),
     repo.countLeads(),
     repo.countDrawingRequests(),
-    repo.countQuoteRequests(),
+    repo.countEnquiries(),
     repo.countMediaLibrary(),
     repo.countUsers(),
     repo.countRoles(),
   ]);
 
   // Fetch small preview lists used on the dashboard
-  const [latestProducts, latestLeads, latestDownloads, latestMaterials] = await Promise.all([
+  const [latestProducts, latestLeads, latestDownloads, latestMaterials, latestContentEntries] = await Promise.all([
     repo.latestProducts(10),
     repo.latestLeads(10),
     repo.latestDownloads(6),
     repo.latestMaterials(6),
+    repo.latestContent(6),
   ]);
 
   // Build a keyed counts map that matches admin resource keys used by the frontend
@@ -52,9 +53,10 @@ export const getDashboard = async () => {
     'media-library': totalMediaLibrary,
     leads: totalLeads,
     'drawing-requests': totalDrawingRequests,
-    'quote-requests': totalQuoteRequests,
+    enquiries: totalEnquiries,
     users: totalUsers,
     roles: totalRoles,
+    content: await repo.countContent(),
   };
 
   return {
@@ -63,6 +65,7 @@ export const getDashboard = async () => {
     latestLeads,
     latestDownloads,
     latestMaterials,
+    latestContent: latestContentEntries,
     recentActivity: [],
   };
 };

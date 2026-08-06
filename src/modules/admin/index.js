@@ -11,10 +11,13 @@ import searchRoutes from "./search/routes.js";
 import leadsRoutes from "./leads/routes.js";
 import brochureRoutes from "./brochure-downloads/routes.js";
 import drawingRequestsRoutes from "./drawing-requests/routes.js";
-import quoteRequestsRoutes from "./quote-requests/routes.js";
+import enquiriesRoutes from "./enquiries/routes.js";
 import mediaLibraryRoutes from "./media-library/routes.js";
 import contentRoutes from "./content/routes.js";
 import usersRoutes from "./users/routes.js";
+import rolesRoutes from "./roles/routes.js";
+import settingsRoutes from "./settings/routes.js";
+import systemLogsRoutes from "./system-logs/routes.js";
 
 const router = express.Router();
 
@@ -28,10 +31,13 @@ router.use("/search", searchRoutes);
 router.use("/leads", leadsRoutes);
 router.use("/brochure-downloads", brochureRoutes);
 router.use("/drawing-requests", drawingRequestsRoutes);
-router.use("/quote-requests", quoteRequestsRoutes);
+router.use("/enquiries", enquiriesRoutes);
 router.use("/media-library", mediaLibraryRoutes);
 router.use("/content", contentRoutes);
 router.use("/users", usersRoutes);
+router.use("/roles", rolesRoutes);
+router.use("/settings", settingsRoutes);
+router.use("/system-logs", systemLogsRoutes);
 router.use("/uploads", uploadsRoutes);
 router.use("/auth", authRoutes);
 

@@ -5,6 +5,7 @@ import Material from "../../../models/Material.js";
 import Enquiry from "../../../models/Enquiry.js";
 import mongoose from "mongoose";
 import BrochureLead from "../../brochure/models/Lead.js";
+import SystemLog from "../system-logs/SystemLog.js";
 
 // Simple aggregated search for admin UI. Returns up to 'limit' rows per resource.
 export const search = async (query = "", limit = 4) => {
@@ -34,6 +35,9 @@ export const search = async (query = "", limit = 4) => {
     BrochureModel ? BrochureModel.find(q ? { $or: [{ firstName: regex }, { lastName: regex }, { email: regex }, { companyName: regex }] } : {}).limit(limit).lean() : Promise.resolve([]),
   ]);
 
+  // Include system logs search results (if any)
+  const systemLogs = q ? await SystemLog.find({ $or: [{ message: regex }, { 'meta.user': regex }, { source: regex }] }).limit(limit).lean() : [];
+
   return {
     products,
     categories,
@@ -41,6 +45,7 @@ export const search = async (query = "", limit = 4) => {
     materials,
     leads,
     brochureLeads,
+    systemLogs,
   };
 };
 

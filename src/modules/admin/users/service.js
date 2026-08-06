@@ -1,4 +1,4 @@
-import User from '../../../models/User.js';
+import User from './User.js';
 
 export const listUsers = async ({ page = 1, limit = 10, search = '', status = '' }) => {
   const skip = Math.max(0, page - 1) * limit;

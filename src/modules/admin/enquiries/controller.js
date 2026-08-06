@@ -1,17 +1,17 @@
 import * as service from "./service.js";
 
-export const listQuoteRequests = async (req, res) => {
+export const listEnquiries = async (req, res) => {
   const page = parseInt(req.query.page || '1', 10);
   const limit = parseInt(req.query.limit || '10', 10);
   const search = req.query.search || req.query.q || '';
-  const result = await service.listQuoteRequests({ page, limit, search });
+  const result = await service.listEnquiries({ page, limit, search });
   return res.apiSuccess(result.rows, undefined, result.pagination);
 };
 
-export const getQuoteRequest = async (req, res) => {
+export const getEnquiry = async (req, res) => {
   const id = req.params.id;
-  const item = await service.getQuoteRequest(id);
+  const item = await service.getEnquiry(id);
   return res.apiSuccess(item);
 };
 
-export default { listQuoteRequests, getQuoteRequest };
+export default { listEnquiries, getEnquiry };

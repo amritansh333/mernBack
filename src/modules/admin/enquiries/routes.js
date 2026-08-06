@@ -6,7 +6,7 @@ const router = express.Router();
 import { adminResponse } from "../common/middleware/adminResponse.js";
 router.use(adminResponse);
 
-router.get("/", asyncHandler(controller.listQuoteRequests));
-router.get("/:id", asyncHandler(controller.getQuoteRequest));
+router.get("/", asyncHandler(controller.listEnquiries));
+router.get("/:id", asyncHandler(controller.getEnquiry));
 
 export default router;

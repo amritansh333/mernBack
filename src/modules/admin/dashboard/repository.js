@@ -36,9 +36,9 @@ export const countDrawingRequests = () => {
   return Model ? Model.countDocuments({}) : Promise.resolve(0);
 };
 
-export const countQuoteRequests = () => {
-  const Model = mongoose.models.QuoteRequest;
-  return Model ? Model.countDocuments({}) : Promise.resolve(0);
+export const countEnquiries = () => {
+  // Count enquiries (single source-of-truth collection).
+  return Enquiry ? Enquiry.countDocuments({}) : Promise.resolve(0);
 };
 
 export const countMediaLibrary = async () => {
@@ -63,18 +63,40 @@ export const countRoles = () => {
   return Model ? Model.countDocuments({}) : Promise.resolve(0);
 };
 
+export const countContent = () => {
+  const Model = mongoose.models.ContentEntry;
+  return Model ? Model.countDocuments({}) : Promise.resolve(0);
+};
+
 export const latestProducts = (limit = 10) => Product.find({}).sort({ createdAt: -1 }).limit(limit).lean();
-export const latestLeads = (limit = 10) => Enquiry.find({}).sort({ createdAt: -1 }).limit(limit).lean();
+export const latestLeads = (limit = 10) => {
+  const Model = mongoose.models.Lead || BrochureLead;
+
+  return Model
+    ? Model.find({})
+        .sort({ createdAt: -1 })
+        .limit(limit)
+        .lean()
+    : Promise.resolve([]);
+};
 export const latestDownloads = (limit = 10) => {
   const Model = mongoose.models.Lead || BrochureLead;
   return Model ? Model.find({}).sort({ createdAt: -1 }).limit(limit).lean() : Promise.resolve([]);
+};
+
+export const latestContent = (limit = 6) => {
+  const Model = mongoose.models.ContentEntry;
+  return Model ? Model.find({}).sort({ updatedAt: -1 }).limit(limit).lean() : Promise.resolve([]);
 };
 
 // Provide latest materials preview if needed by the frontend
 export const latestMaterials = (limit = 6) => Material.find({}).sort({ createdAt: -1 }).limit(limit).lean();
 
 // Count enquiries (admin leads)
-export const countLeads = () => Enquiry.countDocuments({});
+export const countLeads = () => {
+  const Model = mongoose.models.Lead || BrochureLead;
+  return Model ? Model.countDocuments({}) : Promise.resolve(0);
+};
 
 export default {
   countProducts,
@@ -86,12 +108,14 @@ export default {
   countBrochureDownloads,
   countLeads,
   countDrawingRequests,
-  countQuoteRequests,
+  countEnquiries,
   countMediaLibrary,
   countUsers,
   countRoles,
+  countContent,
   latestProducts,
   latestLeads,
   latestDownloads,
   latestMaterials,
+  latestContent,
 };

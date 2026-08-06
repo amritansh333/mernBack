@@ -1,15 +1,15 @@
-import Enquiry from "../../../models/Enquiry.js";
+import Lead from "../../../modules/brochure/models/Lead.js";
 
 export const listLeads = async ({ page = 1, limit = 10, search = "" }) => {
   const q = (search || "").trim();
   const filter = q
-    ? { $or: [{ fullName: { $regex: q, $options: 'i' } }, { email: { $regex: q, $options: 'i' } }, { company: { $regex: q, $options: 'i' } }] }
+    ? { $or: [{ firstName: { $regex: q, $options: 'i' } }, { lastName: { $regex: q, $options: 'i' } }, { email: { $regex: q, $options: 'i' } }, { companyName: { $regex: q, $options: 'i' } }, { mobileNumber: { $regex: q, $options: 'i' } }, { productName: { $regex: q, $options: 'i' } }] }
     : {};
 
   const skip = Math.max(0, page - 1) * limit;
   const [rows, total] = await Promise.all([
-    Enquiry.find(filter).sort({ createdAt: -1 }).skip(skip).limit(limit).lean(),
-    Enquiry.countDocuments(filter),
+    Lead.find(filter).sort({ createdAt: -1 }).skip(skip).limit(limit).lean(),
+    Lead.countDocuments(filter),
   ]);
 
   return {
@@ -18,6 +18,6 @@ export const listLeads = async ({ page = 1, limit = 10, search = "" }) => {
   };
 };
 
-export const getLead = async (id) => Enquiry.findById(id).lean();
+export const getLead = async (id) => Lead.findById(id).lean();
 
 export default { listLeads, getLead };

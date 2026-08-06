@@ -5,6 +5,16 @@ export const listLeads = async (req, res) => {
   const limit = parseInt(req.query.limit || '10', 10);
   const search = req.query.search || req.query.q || '';
   const result = await service.listLeads({ page, limit, search });
+
+  // Temporary logs to verify backend is returning Lead documents (Step 5)
+  try {
+    const data = result.rows || [];
+    console.log("Lead Count:", data.length);
+    console.log("First Record:", data[0]);
+  } catch (err) {
+    console.log("Error logging lead data:", err);
+  }
+
   return res.apiSuccess(result.rows, undefined, result.pagination);
 };
 
