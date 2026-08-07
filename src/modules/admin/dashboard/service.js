@@ -7,6 +7,7 @@ export const getDashboard = async () => {
     totalCategories,
     totalBrands,
     totalMaterials,
+    totalSubcategories,
     totalMachineComponents,
     totalSemiFinished,
     totalBrochureDownloads,
@@ -21,6 +22,7 @@ export const getDashboard = async () => {
     repo.countCategories(),
     repo.countBrands(),
     repo.countMaterials(),
+    repo.countSubcategories(),
     repo.countMachineComponents(),
     repo.countSemiFinishedProducts(),
     repo.countBrochureDownloads(),
@@ -45,6 +47,7 @@ export const getDashboard = async () => {
   const counts = {
     products: totalProducts,
     categories: totalCategories,
+    subcategories: totalSubcategories,
     brands: totalBrands,
     materials: totalMaterials,
     'machine-components': totalMachineComponents,

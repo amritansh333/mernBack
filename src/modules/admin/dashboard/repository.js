@@ -3,6 +3,7 @@ import Category from "../../../models/Category.js";
 import Brand from "../../../models/Brand.js";
 import Material from "../../../models/Material.js";
 import Enquiry from "../../../models/Enquiry.js";
+import SubCategory from "../../../models/SubCategory.js";
 import mongoose from "mongoose";
 import { PRODUCT_EXPERIENCES } from "../../../constants/productExperiences.js";
 import BrochureLead from "../../brochure/models/Lead.js";
@@ -12,6 +13,7 @@ export const countProducts = () => Product.countDocuments({});
 export const countCategories = () => Category.countDocuments({});
 export const countBrands = () => Brand.countDocuments({});
 export const countMaterials = () => Material.countDocuments({});
+export const countSubcategories = () => SubCategory ? SubCategory.countDocuments({}) : Promise.resolve(0);
 
 // Machine components are stored in a separate admin model
 export const countMachineComponents = () => {
@@ -103,6 +105,7 @@ export default {
   countCategories,
   countBrands,
   countMaterials,
+  countSubcategories,
   countMachineComponents,
   countSemiFinishedProducts,
   countBrochureDownloads,

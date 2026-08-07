@@ -1,6 +1,7 @@
 import Product from "../../../models/Product.js";
 import Category from "../../../models/Category.js";
 import Brand from "../../../models/Brand.js";
+import SubCategory from "../../../models/SubCategory.js";
 import Material from "../../../models/Material.js";
 import Enquiry from "../../../models/Enquiry.js";
 import mongoose from "mongoose";
@@ -19,11 +20,12 @@ export const search = async (query = "", limit = 4) => {
   const brandQuery = q ? { $or: [{ name: regex }, { slug: regex }] } : {};
   const materialQuery = q ? { name: regex } : {};
 
-  const [products, categories, brands, materials] = await Promise.all([
+  const [products, categories, brands, materials, subcategories] = await Promise.all([
     Product.find(productQuery).limit(limit).lean(),
     Category.find(categoryQuery).limit(limit).lean(),
     Brand.find(brandQuery).limit(limit).lean(),
     Material.find(materialQuery).limit(limit).lean(),
+    SubCategory.find(q ? { $or: [{ name: regex }, { slug: regex }] } : {}).limit(limit).lean(),
   ]);
 
   // Attempts to include leads and brochure downloads if models exist
@@ -41,6 +43,7 @@ export const search = async (query = "", limit = 4) => {
   return {
     products,
     categories,
+    subcategories,
     brands,
     materials,
     leads,

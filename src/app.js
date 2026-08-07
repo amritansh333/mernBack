@@ -25,6 +25,7 @@ import semiFinishedRoutes from "./modules/semiFinished/routes/semiFinishedRoutes
 import industryRoutes from "./routes/industryRoutes.js";
 import materialRoutes from "./routes/materialRoutes.js";
 import enquiryRoutes from "./routes/enquiryRoutes.js";
+import drawingRequestRoutes from "./modules/drawing-requests/routes.js";
 
 // Admin routes
 import adminModule from "./modules/admin/index.js";
@@ -65,6 +66,11 @@ app.use(
 );
 
 app.use(
+  "/uploads/drawings",
+  express.static(path.join(__dirname, "../public/uploads/drawings")),
+);
+
+app.use(
   "/catalogs",
   express.static(path.join(__dirname, "../public/catalogs")),
 );
@@ -83,6 +89,7 @@ app.use("/api/machine-components", machineComponentRoutes);
 app.use("/api/industries", industryRoutes);
 app.use("/api/materials", materialRoutes);
 app.use("/api/enquiries", enquiryRoutes);
+app.use("/api/drawing-requests", drawingRequestRoutes);
 app.use("/api/catalogrequests", catalogRoutes);
 
 // Admin APIs (do not interfere with public routes)

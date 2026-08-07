@@ -2,6 +2,7 @@ import express from "express";
 import productsRoutes from "./products/routes.js";
 import categoriesRoutes from "./categories/routes.js";
 import brandsRoutes from "./brands/routes.js";
+import subcategoriesRoutes from "./subcategories/routes.js";
 import materialsRoutes from "./materials/routes.js";
 import machineComponentsRoutes from "./machine-components/routes.js";
 import dashboardRoutes from "./dashboard/routes.js";
@@ -23,6 +24,7 @@ const router = express.Router();
 
 router.use("/products", productsRoutes);
 router.use("/categories", categoriesRoutes);
+router.use("/subcategories", subcategoriesRoutes);
 router.use("/brands", brandsRoutes);
 router.use("/materials", materialsRoutes);
 router.use("/machine-components", machineComponentsRoutes);
