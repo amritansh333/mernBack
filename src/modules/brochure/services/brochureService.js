@@ -10,8 +10,7 @@ const developmentJwtSecret = crypto.randomBytes(64).toString("hex");
 
 const getJwtSecret = () => env.brochureJwtSecret || developmentJwtSecret;
 
-const base64UrlEncode = (value) =>
-  Buffer.from(value).toString("base64url");
+const base64UrlEncode = (value) => Buffer.from(value).toString("base64url");
 
 const base64UrlJson = (value) => base64UrlEncode(JSON.stringify(value));
 

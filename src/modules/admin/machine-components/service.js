@@ -17,7 +17,10 @@ export const listMachineComponents = async (req) => {
 
   const total = await repo.count(q);
   const items = await repo.find(q, { sort, skip: (page - 1) * limit, limit });
-  return { items, meta: { page, limit, total, pages: Math.ceil(total / limit) } };
+  return {
+    items,
+    meta: { page, limit, total, pages: Math.ceil(total / limit) },
+  };
 };
 
 export const getMachineComponent = async (id) => {
@@ -45,4 +48,10 @@ export const deleteMachineComponent = async (id) => {
   return removed;
 };
 
-export default { listMachineComponents, getMachineComponent, createMachineComponent, updateMachineComponent, deleteMachineComponent };
+export default {
+  listMachineComponents,
+  getMachineComponent,
+  createMachineComponent,
+  updateMachineComponent,
+  deleteMachineComponent,
+};

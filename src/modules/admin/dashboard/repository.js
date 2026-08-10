@@ -13,12 +13,15 @@ export const countProducts = () => Product.countDocuments({});
 export const countCategories = () => Category.countDocuments({});
 export const countBrands = () => Brand.countDocuments({});
 export const countMaterials = () => Material.countDocuments({});
-export const countSubcategories = () => SubCategory ? SubCategory.countDocuments({}) : Promise.resolve(0);
+export const countSubcategories = () =>
+  SubCategory ? SubCategory.countDocuments({}) : Promise.resolve(0);
 
 // Machine components are stored in a separate admin model
 export const countMachineComponents = () => {
   const MachineComponentAdmin = mongoose.models.MachineComponentAdmin;
-  return MachineComponentAdmin ? MachineComponentAdmin.countDocuments({}) : Promise.resolve(0);
+  return MachineComponentAdmin
+    ? MachineComponentAdmin.countDocuments({})
+    : Promise.resolve(0);
 };
 
 // Count Semi Finished products by product experience enum so we reuse the Product model
@@ -70,29 +73,32 @@ export const countContent = () => {
   return Model ? Model.countDocuments({}) : Promise.resolve(0);
 };
 
-export const latestProducts = (limit = 10) => Product.find({}).sort({ createdAt: -1 }).limit(limit).lean();
+export const latestProducts = (limit = 10) =>
+  Product.find({}).sort({ createdAt: -1 }).limit(limit).lean();
 export const latestLeads = (limit = 10) => {
   const Model = mongoose.models.Lead || BrochureLead;
 
   return Model
-    ? Model.find({})
-        .sort({ createdAt: -1 })
-        .limit(limit)
-        .lean()
+    ? Model.find({}).sort({ createdAt: -1 }).limit(limit).lean()
     : Promise.resolve([]);
 };
 export const latestDownloads = (limit = 10) => {
   const Model = mongoose.models.Lead || BrochureLead;
-  return Model ? Model.find({}).sort({ createdAt: -1 }).limit(limit).lean() : Promise.resolve([]);
+  return Model
+    ? Model.find({}).sort({ createdAt: -1 }).limit(limit).lean()
+    : Promise.resolve([]);
 };
 
 export const latestContent = (limit = 6) => {
   const Model = mongoose.models.ContentEntry;
-  return Model ? Model.find({}).sort({ updatedAt: -1 }).limit(limit).lean() : Promise.resolve([]);
+  return Model
+    ? Model.find({}).sort({ updatedAt: -1 }).limit(limit).lean()
+    : Promise.resolve([]);
 };
 
 // Provide latest materials preview if needed by the frontend
-export const latestMaterials = (limit = 6) => Material.find({}).sort({ createdAt: -1 }).limit(limit).lean();
+export const latestMaterials = (limit = 6) =>
+  Material.find({}).sort({ createdAt: -1 }).limit(limit).lean();
 
 // Count enquiries (admin leads)
 export const countLeads = () => {

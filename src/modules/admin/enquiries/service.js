@@ -5,11 +5,11 @@ export const listEnquiries = async ({ page = 1, limit = 10, search = "" }) => {
   const filter = q
     ? {
         $or: [
-          { fullName: { $regex: q, $options: 'i' } },
-          { email: { $regex: q, $options: 'i' } },
-          { company: { $regex: q, $options: 'i' } },
-          { product: { $regex: q, $options: 'i' } },
-          { phone: { $regex: q, $options: 'i' } },
+          { fullName: { $regex: q, $options: "i" } },
+          { email: { $regex: q, $options: "i" } },
+          { company: { $regex: q, $options: "i" } },
+          { product: { $regex: q, $options: "i" } },
+          { phone: { $regex: q, $options: "i" } },
         ],
       }
     : {};
@@ -25,7 +25,12 @@ export const listEnquiries = async ({ page = 1, limit = 10, search = "" }) => {
 
   return {
     rows,
-    pagination: { page, limit, total, pages: Math.max(1, Math.ceil(total / limit)) },
+    pagination: {
+      page,
+      limit,
+      total,
+      pages: Math.max(1, Math.ceil(total / limit)),
+    },
   };
 };
 

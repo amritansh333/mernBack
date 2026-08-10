@@ -7,6 +7,10 @@ import { adminResponse } from "../common/middleware/adminResponse.js";
 router.use(adminResponse);
 
 router.get("/", asyncHandler(controller.getUploadsRoot));
-router.post("/single", upload.uploadSingle("misc"), asyncHandler(controller.uploadSingle));
+router.post(
+  "/single",
+  upload.uploadSingle("misc"),
+  asyncHandler(controller.uploadSingle),
+);
 
 export default router;

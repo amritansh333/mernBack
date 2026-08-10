@@ -9,7 +9,11 @@ router.use(adminResponse);
 
 router.get("/", asyncHandler(controller.listBrands));
 router.get("/:id", asyncHandler(controller.getBrand));
-router.post("/", requireBodyKeys(["name", "slug"]), asyncHandler(controller.createBrand));
+router.post(
+  "/",
+  requireBodyKeys(["name", "slug"]),
+  asyncHandler(controller.createBrand),
+);
 router.put("/:id", asyncHandler(controller.updateBrand));
 router.patch("/:id", asyncHandler(controller.updateBrand));
 router.delete("/:id", asyncHandler(controller.deleteBrand));

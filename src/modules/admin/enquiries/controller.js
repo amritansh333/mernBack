@@ -1,9 +1,9 @@
 import * as service from "./service.js";
 
 export const listEnquiries = async (req, res) => {
-  const page = parseInt(req.query.page || '1', 10);
-  const limit = parseInt(req.query.limit || '10', 10);
-  const search = req.query.search || req.query.q || '';
+  const page = parseInt(req.query.page || "1", 10);
+  const limit = parseInt(req.query.limit || "10", 10);
+  const search = req.query.search || req.query.q || "";
   const result = await service.listEnquiries({ page, limit, search });
   return res.apiSuccess(result.rows, undefined, result.pagination);
 };

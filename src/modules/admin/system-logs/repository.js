@@ -1,4 +1,4 @@
-import SystemLog from './SystemLog.js';
+import SystemLog from "./SystemLog.js";
 
 export const count = (query = {}) => SystemLog.countDocuments(query);
 

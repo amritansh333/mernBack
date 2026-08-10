@@ -10,9 +10,22 @@ router.use(adminResponse);
 
 router.get("/", asyncHandler(controller.listMachineComponents));
 router.get("/:id", asyncHandler(controller.getMachineComponent));
-router.post("/", requireBodyKeys(["name", "slug"]), upload.uploadSingle("products"), asyncHandler(controller.createMachineComponent));
-router.put("/:id", upload.uploadSingle("products"), asyncHandler(controller.updateMachineComponent));
-router.patch("/:id", upload.uploadSingle("products"), asyncHandler(controller.updateMachineComponent));
+router.post(
+  "/",
+  requireBodyKeys(["name", "slug"]),
+  upload.uploadSingle("products"),
+  asyncHandler(controller.createMachineComponent),
+);
+router.put(
+  "/:id",
+  upload.uploadSingle("products"),
+  asyncHandler(controller.updateMachineComponent),
+);
+router.patch(
+  "/:id",
+  upload.uploadSingle("products"),
+  asyncHandler(controller.updateMachineComponent),
+);
 router.delete("/:id", asyncHandler(controller.deleteMachineComponent));
 
 export default router;

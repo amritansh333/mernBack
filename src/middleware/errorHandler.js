@@ -21,18 +21,37 @@ export const errorHandler = (error, req, res, next) => {
 
   if (error.name === "MulterError") {
     if (error.code === "LIMIT_FILE_SIZE") {
-      return res.status(413).json({ success: false, message: error.message || "One or more files exceed the maximum allowed size" });
+      return res
+        .status(413)
+        .json({
+          success: false,
+          message:
+            error.message ||
+            "One or more files exceed the maximum allowed size",
+        });
     }
 
     if (error.code === "LIMIT_FILE_COUNT") {
-      return res.status(413).json({ success: false, message: error.message || "Too many files uploaded" });
+      return res
+        .status(413)
+        .json({
+          success: false,
+          message: error.message || "Too many files uploaded",
+        });
     }
 
     if (error.code === "LIMIT_UNEXPECTED_FILE") {
-      return res.status(415).json({ success: false, message: error.message || "Unexpected file upload" });
+      return res
+        .status(415)
+        .json({
+          success: false,
+          message: error.message || "Unexpected file upload",
+        });
     }
 
-    return res.status(400).json({ success: false, message: error.message || "File upload failed" });
+    return res
+      .status(400)
+      .json({ success: false, message: error.message || "File upload failed" });
   }
 
   if (!env.isProduction && statusCode === 500 && error.stack) {

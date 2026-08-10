@@ -31,7 +31,7 @@ export const clearBrochureSessionCookie = (res) => {
     secure: env.isProduction,
     sameSite: env.isProduction ? "none" : "lax",
     path: "/",
-});
+  });
 };
 
 export const validateBrochureSession = async (req, res) => {

@@ -9,7 +9,11 @@ router.use(adminResponse);
 
 router.get("/", asyncHandler(controller.listSubcategories));
 router.get("/:id", asyncHandler(controller.getSubcategory));
-router.post("/", requireBodyKeys(["name", "slug", "category"]), asyncHandler(controller.createSubcategory));
+router.post(
+  "/",
+  requireBodyKeys(["name", "slug", "category"]),
+  asyncHandler(controller.createSubcategory),
+);
 router.put("/:id", asyncHandler(controller.updateSubcategory));
 router.patch("/:id", asyncHandler(controller.updateSubcategory));
 router.delete("/:id", asyncHandler(controller.deleteSubcategory));

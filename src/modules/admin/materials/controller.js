@@ -8,7 +8,10 @@ export const listMaterials = async (req, res) => {
 export const getMaterial = async (req, res) => {
   const data = await service.getMaterial(req.params.id);
   if (!data || !data.item) return res.apiError(404, "Material not found");
-  return res.apiSuccess({ ...data.item, linkedProducts: data.linkedProducts }, "Material fetched");
+  return res.apiSuccess(
+    { ...data.item, linkedProducts: data.linkedProducts },
+    "Material fetched",
+  );
 };
 
 export const createMaterial = async (req, res) => {
@@ -27,8 +30,17 @@ export const deleteMaterial = async (req, res) => {
 };
 
 export const bulkDelete = async (req, res) => {
-  const result = await service.bulkDelete(Array.isArray(req.body.ids) ? req.body.ids : []);
+  const result = await service.bulkDelete(
+    Array.isArray(req.body.ids) ? req.body.ids : [],
+  );
   return res.apiSuccess(result, "Materials deleted");
 };
 
-export default { listMaterials, getMaterial, createMaterial, updateMaterial, deleteMaterial, bulkDelete };
+export default {
+  listMaterials,
+  getMaterial,
+  createMaterial,
+  updateMaterial,
+  deleteMaterial,
+  bulkDelete,
+};

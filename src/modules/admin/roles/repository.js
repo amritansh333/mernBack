@@ -1,6 +1,5 @@
 import Role from "./Role.js";
 
-
 export const count = (query) => Role.countDocuments(query);
 export const find = (query, { sort = {}, skip = 0, limit = 50 } = {}) =>
   Role.find(query).sort(sort).skip(skip).limit(limit).lean();
@@ -26,4 +25,15 @@ export const removePermissions = (id, permissions = []) =>
     { new: true },
   ).lean();
 
-export default { count, find, findById, findOne, create, updateById, deleteById, deleteMany, addPermissions, removePermissions };
+export default {
+  count,
+  find,
+  findById,
+  findOne,
+  create,
+  updateById,
+  deleteById,
+  deleteMany,
+  addPermissions,
+  removePermissions,
+};

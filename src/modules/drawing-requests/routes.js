@@ -5,6 +5,10 @@ import { drawingRequestUpload } from "./service.js";
 
 const router = express.Router();
 
-router.post("/", drawingRequestUpload, asyncHandler(controller.createDrawingRequest));
+router.post(
+  "/",
+  drawingRequestUpload,
+  asyncHandler(controller.createDrawingRequest),
+);
 
 export default router;

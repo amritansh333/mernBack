@@ -7,17 +7,25 @@ export const listMachineComponents = async (req, res) => {
 
 export const getMachineComponent = async (req, res) => {
   const data = await service.getMachineComponent(req.params.id);
-  if (!data || !data.item) return res.apiError(404, "Machine component not found");
+  if (!data || !data.item)
+    return res.apiError(404, "Machine component not found");
   return res.apiSuccess(data.item, "Machine component fetched");
 };
 
 export const createMachineComponent = async (req, res) => {
-  const created = await service.createMachineComponent(req.body || {}, req.file);
+  const created = await service.createMachineComponent(
+    req.body || {},
+    req.file,
+  );
   return res.apiSuccess(created, "Machine component created");
 };
 
 export const updateMachineComponent = async (req, res) => {
-  const updated = await service.updateMachineComponent(req.params.id, req.body || {}, req.file);
+  const updated = await service.updateMachineComponent(
+    req.params.id,
+    req.body || {},
+    req.file,
+  );
   return res.apiSuccess(updated, "Machine component updated");
 };
 
@@ -26,4 +34,10 @@ export const deleteMachineComponent = async (req, res) => {
   return res.apiSuccess(removed, "Machine component deleted");
 };
 
-export default { listMachineComponents, getMachineComponent, createMachineComponent, updateMachineComponent, deleteMachineComponent };
+export default {
+  listMachineComponents,
+  getMachineComponent,
+  createMachineComponent,
+  updateMachineComponent,
+  deleteMachineComponent,
+};

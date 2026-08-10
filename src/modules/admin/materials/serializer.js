@@ -4,6 +4,7 @@ export const serializeMaterial = (doc) => {
   return { id: _id, name, slug, isVisible: !!isVisible, createdAt, updatedAt };
 };
 
-export const serializeList = (docs) => (Array.isArray(docs) ? docs.map(serializeMaterial) : []);
+export const serializeList = (docs) =>
+  Array.isArray(docs) ? docs.map(serializeMaterial) : [];
 
 export default { serializeMaterial, serializeList };

@@ -1,6 +1,11 @@
 import ContentEntry from "../../../models/ContentEntry.js";
 
-export const listContent = async ({ page = 1, limit = 10, search = "", status = "" }) => {
+export const listContent = async ({
+  page = 1,
+  limit = 10,
+  search = "",
+  status = "",
+}) => {
   const q = (search || "").trim();
   const filter = {};
   if (q) {
@@ -17,10 +22,22 @@ export const listContent = async ({ page = 1, limit = 10, search = "", status = 
   }
   const skip = Math.max(0, page - 1) * limit;
   const [rows, total] = await Promise.all([
-    ContentEntry.find(filter).sort({ updatedAt: -1 }).skip(skip).limit(limit).lean(),
+    ContentEntry.find(filter)
+      .sort({ updatedAt: -1 })
+      .skip(skip)
+      .limit(limit)
+      .lean(),
     ContentEntry.countDocuments(filter),
   ]);
-  return { rows, pagination: { page, limit, total, pages: Math.max(1, Math.ceil(total / limit)) } };
+  return {
+    rows,
+    pagination: {
+      page,
+      limit,
+      total,
+      pages: Math.max(1, Math.ceil(total / limit)),
+    },
+  };
 };
 
 export const getContent = async (id) => ContentEntry.findById(id).lean();
@@ -32,7 +49,9 @@ export const createContent = async (data) => {
 };
 
 export const updateContent = async (id, data) => {
-  const updated = await ContentEntry.findByIdAndUpdate(id, data, { new: true }).lean();
+  const updated = await ContentEntry.findByIdAndUpdate(id, data, {
+    new: true,
+  }).lean();
   return updated;
 };
 
@@ -49,6 +68,16 @@ export const bulkDeleteContent = async (ids) => {
 
 export const countContentEntries = () => ContentEntry.countDocuments({});
 
-export const latestContent = (limit = 6) => ContentEntry.find({}).sort({ updatedAt: -1 }).limit(limit).lean();
+export const latestContent = (limit = 6) =>
+  ContentEntry.find({}).sort({ updatedAt: -1 }).limit(limit).lean();
 
-export default { listContent, getContent, createContent, updateContent, deleteContent, bulkDeleteContent, countContentEntries, latestContent };
+export default {
+  listContent,
+  getContent,
+  createContent,
+  updateContent,
+  deleteContent,
+  bulkDeleteContent,
+  countContentEntries,
+  latestContent,
+};

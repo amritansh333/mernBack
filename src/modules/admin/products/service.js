@@ -4,7 +4,15 @@ import { validatePagination, validateSort } from "./validator.js";
 
 const buildQueryFromReq = (req) => {
   const q = {};
-  const { search, brand, category, subCategory, material, experience, isVisible } = req.query;
+  const {
+    search,
+    brand,
+    category,
+    subCategory,
+    material,
+    experience,
+    isVisible,
+  } = req.query;
   if (search) {
     q.$or = [
       { name: { $regex: search, $options: "i" } },
@@ -30,7 +38,12 @@ export const listProducts = async (req) => {
   const query = buildQueryFromReq(req);
   const [total, items] = await Promise.all([
     repo.count(query),
-    repo.find(query, { sort, skip: (page - 1) * limit, limit, populate: ["category", "subCategory", "brand", "materials"] }),
+    repo.find(query, {
+      sort,
+      skip: (page - 1) * limit,
+      limit,
+      populate: ["category", "subCategory", "brand", "materials"],
+    }),
   ]);
 
   return {
@@ -40,7 +53,12 @@ export const listProducts = async (req) => {
 };
 
 export const getProduct = async (id) => {
-  const item = await repo.findById(id, ["category", "subCategory", "brand", "materials"]);
+  const item = await repo.findById(id, [
+    "category",
+    "subCategory",
+    "brand",
+    "materials",
+  ]);
   if (!item) return null;
   const enquiries = await repo.findEnquiriesByProductName(item.name, 5);
   return { item: serializeProduct(item), enquiries };
@@ -53,19 +71,32 @@ export const createProduct = async (payload, file) => {
     if (exists) throw { status: 400, message: "Duplicate slug" };
   }
   const created = await repo.create(payload);
-  const doc = await repo.findById(created._id, ["category", "subCategory", "brand", "materials"]);
+  const doc = await repo.findById(created._id, [
+    "category",
+    "subCategory",
+    "brand",
+    "materials",
+  ]);
   return serializeProduct(doc);
 };
 
 export const updateProduct = async (id, payload, file) => {
   if (file) payload.image = `/uploads/products/${file.filename}`;
   if (payload.slug) {
-    const existing = await repo.findOne({ slug: payload.slug, _id: { $ne: id } });
+    const existing = await repo.findOne({
+      slug: payload.slug,
+      _id: { $ne: id },
+    });
     if (existing) throw { status: 400, message: "Duplicate slug" };
   }
   const updated = await repo.updateById(id, payload);
   if (!updated) throw { status: 404, message: "Product not found" };
-  const doc = await repo.findById(id, ["category", "subCategory", "brand", "materials"]);
+  const doc = await repo.findById(id, [
+    "category",
+    "subCategory",
+    "brand",
+    "materials",
+  ]);
   return serializeProduct(doc);
 };
 
@@ -76,13 +107,16 @@ export const deleteProduct = async (id) => {
 };
 
 export const bulkDelete = async (ids) => {
-  if (!Array.isArray(ids) || ids.length === 0) throw { status: 400, message: "ids[] required" };
+  if (!Array.isArray(ids) || ids.length === 0)
+    throw { status: 400, message: "ids[] required" };
   return repo.deleteMany(ids);
 };
 
 export const bulkStatusUpdate = async (ids, isVisible) => {
-  if (!Array.isArray(ids) || ids.length === 0) throw { status: 400, message: "ids[] required" };
-  if (typeof isVisible !== "boolean") throw { status: 400, message: "isVisible boolean required" };
+  if (!Array.isArray(ids) || ids.length === 0)
+    throw { status: 400, message: "ids[] required" };
+  if (typeof isVisible !== "boolean")
+    throw { status: 400, message: "isVisible boolean required" };
   return repo.updateMany(ids, { isVisible });
 };
 

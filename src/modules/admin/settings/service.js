@@ -11,18 +11,27 @@ export const listSettings = async (req) => {
   const q = {};
   if (req.query.search) {
     const s = req.query.search;
-    q.$or = [{ name: { $regex: s, $options: "i" } }, { key: { $regex: s, $options: "i" } }, { description: { $regex: s, $options: "i" } }];
+    q.$or = [
+      { name: { $regex: s, $options: "i" } },
+      { key: { $regex: s, $options: "i" } },
+      { description: { $regex: s, $options: "i" } },
+    ];
   }
 
   if (req.query.group) q.group = req.query.group;
-  if (req.query.isVisible !== undefined) q.isVisible = req.query.isVisible === "true" || req.query.isVisible === true;
+  if (req.query.isVisible !== undefined)
+    q.isVisible =
+      req.query.isVisible === "true" || req.query.isVisible === true;
 
   const [total, items] = await Promise.all([
     repo.count(q),
     repo.find(q, { sort, skip: (page - 1) * limit, limit }),
   ]);
 
-  return { items: items.map(serializeSetting), meta: { page, limit, total, pages: Math.ceil(total / limit) } };
+  return {
+    items: items.map(serializeSetting),
+    meta: { page, limit, total, pages: Math.ceil(total / limit) },
+  };
 };
 
 export const getSetting = async (id) => {
@@ -57,8 +66,16 @@ export const deleteSetting = async (id) => {
 };
 
 export const bulkDelete = async (ids) => {
-  if (!Array.isArray(ids) || ids.length === 0) throw { status: 400, message: "ids[] required" };
+  if (!Array.isArray(ids) || ids.length === 0)
+    throw { status: 400, message: "ids[] required" };
   return repo.deleteMany(ids);
 };
 
-export default { listSettings, getSetting, createSetting, updateSetting, deleteSetting, bulkDelete };
+export default {
+  listSettings,
+  getSetting,
+  createSetting,
+  updateSetting,
+  deleteSetting,
+  bulkDelete,
+};

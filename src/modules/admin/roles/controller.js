@@ -27,7 +27,9 @@ export const deleteRole = async (req, res) => {
 };
 
 export const bulkDelete = async (req, res) => {
-  const result = await service.bulkDelete(Array.isArray(req.body.ids) ? req.body.ids : []);
+  const result = await service.bulkDelete(
+    Array.isArray(req.body.ids) ? req.body.ids : [],
+  );
   return res.apiSuccess(result, "Roles deleted");
 };
 
@@ -37,15 +39,29 @@ export const permissionMatrix = async (req, res) => {
 };
 
 export const assignPermissions = async (req, res) => {
-  const permissions = Array.isArray(req.body.permissions) ? req.body.permissions : [];
+  const permissions = Array.isArray(req.body.permissions)
+    ? req.body.permissions
+    : [];
   const updated = await service.assignPermissions(req.params.id, permissions);
   return res.apiSuccess(updated, "Permissions assigned");
 };
 
 export const removePermissions = async (req, res) => {
-  const permissions = Array.isArray(req.body.permissions) ? req.body.permissions : [];
+  const permissions = Array.isArray(req.body.permissions)
+    ? req.body.permissions
+    : [];
   const updated = await service.removePermissions(req.params.id, permissions);
   return res.apiSuccess(updated, "Permissions removed");
 };
 
-export default { listRoles, getRole, createRole, updateRole, deleteRole, bulkDelete, permissionMatrix, assignPermissions, removePermissions };
+export default {
+  listRoles,
+  getRole,
+  createRole,
+  updateRole,
+  deleteRole,
+  bulkDelete,
+  permissionMatrix,
+  assignPermissions,
+  removePermissions,
+};

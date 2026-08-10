@@ -27,7 +27,9 @@ export const deleteCategory = async (req, res) => {
 };
 
 export const bulkDelete = async (req, res) => {
-  const result = await service.bulkDelete(Array.isArray(req.body.ids) ? req.body.ids : []);
+  const result = await service.bulkDelete(
+    Array.isArray(req.body.ids) ? req.body.ids : [],
+  );
   return res.apiSuccess(result, "Categories deleted");
 };
 

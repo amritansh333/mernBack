@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
 const { Schema } = mongoose;
 
@@ -11,4 +11,5 @@ const SystemLogSchema = new Schema({
   context: { type: Schema.Types.Mixed },
 });
 
-export default mongoose.models.SystemLog || mongoose.model('SystemLog', SystemLogSchema);
+export default mongoose.models.SystemLog ||
+  mongoose.model("SystemLog", SystemLogSchema);

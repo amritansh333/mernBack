@@ -14,7 +14,8 @@ const buildQueryFromReq = (req) => {
     ];
   }
   if (req.query.experience) q.experience = req.query.experience;
-  if (req.query.isVisible !== undefined) q.isVisible = req.query.isVisible === "true";
+  if (req.query.isVisible !== undefined)
+    q.isVisible = req.query.isVisible === "true";
   return q;
 };
 
@@ -25,7 +26,10 @@ export const listCategories = async (req) => {
   const sort = { [sortField || "order"]: sortDir === "desc" ? -1 : 1 };
 
   const query = buildQueryFromReq(req);
-  const [total, items] = await Promise.all([repo.count(query), repo.find(query, { sort, skip: (page - 1) * limit, limit })]);
+  const [total, items] = await Promise.all([
+    repo.count(query),
+    repo.find(query, { sort, skip: (page - 1) * limit, limit }),
+  ]);
 
   const itemsWithMeta = await Promise.all(
     items.map(async (item) => {
@@ -35,7 +39,10 @@ export const listCategories = async (req) => {
     }),
   );
 
-  return { items: itemsWithMeta.map(serializeCategory), meta: { page, limit, total, pages: Math.ceil(total / limit) } };
+  return {
+    items: itemsWithMeta.map(serializeCategory),
+    meta: { page, limit, total, pages: Math.ceil(total / limit) },
+  };
 };
 
 export const getCategory = async (id) => {
@@ -43,7 +50,10 @@ export const getCategory = async (id) => {
   if (!item) return null;
   const productCount = await Product.countDocuments({ category: item._id });
   const subcategories = await Category.find({ parent: item._id }).lean();
-  return { item: serializeCategory(item), meta: { productCount, subcategories } };
+  return {
+    item: serializeCategory(item),
+    meta: { productCount, subcategories },
+  };
 };
 
 export const createCategory = async (payload) => {
@@ -57,7 +67,10 @@ export const createCategory = async (payload) => {
 
 export const updateCategory = async (id, payload) => {
   if (payload.slug) {
-    const existing = await repo.findOne({ slug: payload.slug, _id: { $ne: id } });
+    const existing = await repo.findOne({
+      slug: payload.slug,
+      _id: { $ne: id },
+    });
     if (existing) throw { status: 400, message: "Duplicate slug" };
   }
   const updated = await repo.updateById(id, payload);
@@ -72,8 +85,16 @@ export const deleteCategory = async (id) => {
 };
 
 export const bulkDelete = async (ids) => {
-  if (!Array.isArray(ids) || ids.length === 0) throw { status: 400, message: "ids[] required" };
+  if (!Array.isArray(ids) || ids.length === 0)
+    throw { status: 400, message: "ids[] required" };
   return repo.deleteMany(ids);
 };
 
-export default { listCategories, getCategory, createCategory, updateCategory, deleteCategory, bulkDelete };
+export default {
+  listCategories,
+  getCategory,
+  createCategory,
+  updateCategory,
+  deleteCategory,
+  bulkDelete,
+};

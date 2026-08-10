@@ -5,7 +5,10 @@ import { validatePagination } from "./validator.js";
 const buildQueryFromReq = (req) => {
   const q = {};
   if (req.query.search) {
-    q.$or = [{ name: { $regex: req.query.search, $options: "i" } }, { slug: { $regex: req.query.search, $options: "i" } }];
+    q.$or = [
+      { name: { $regex: req.query.search, $options: "i" } },
+      { slug: { $regex: req.query.search, $options: "i" } },
+    ];
   }
   if (req.query.experience) q.experience = req.query.experience;
   if (req.query.category) q.category = req.query.category;
@@ -19,9 +22,15 @@ export const listSubcategories = async (req) => {
   const sort = { [sortField || "order"]: sortDir === "desc" ? -1 : 1 };
 
   const query = buildQueryFromReq(req);
-  const [total, items] = await Promise.all([repo.count(query), repo.find(query, { sort, skip: (page - 1) * limit, limit })]);
+  const [total, items] = await Promise.all([
+    repo.count(query),
+    repo.find(query, { sort, skip: (page - 1) * limit, limit }),
+  ]);
 
-  return { items: items.map(serializeSubcategory), meta: { page, limit, total, pages: Math.ceil(total / limit) } };
+  return {
+    items: items.map(serializeSubcategory),
+    meta: { page, limit, total, pages: Math.ceil(total / limit) },
+  };
 };
 
 export const getSubcategory = async (id) => {
@@ -42,7 +51,10 @@ export const createSubcategory = async (payload) => {
 
 export const updateSubcategory = async (id, payload) => {
   if (payload.slug) {
-    const existing = await repo.findOne({ slug: payload.slug, _id: { $ne: id } });
+    const existing = await repo.findOne({
+      slug: payload.slug,
+      _id: { $ne: id },
+    });
     if (existing) throw { status: 400, message: "Duplicate slug" };
   }
   const updated = await repo.updateById(id, payload);
@@ -57,8 +69,16 @@ export const deleteSubcategory = async (id) => {
 };
 
 export const bulkDelete = async (ids) => {
-  if (!Array.isArray(ids) || ids.length === 0) throw { status: 400, message: "ids[] required" };
+  if (!Array.isArray(ids) || ids.length === 0)
+    throw { status: 400, message: "ids[] required" };
   return repo.deleteMany(ids);
 };
 
-export default { listSubcategories, getSubcategory, createSubcategory, updateSubcategory, deleteSubcategory, bulkDelete };
+export default {
+  listSubcategories,
+  getSubcategory,
+  createSubcategory,
+  updateSubcategory,
+  deleteSubcategory,
+  bulkDelete,
+};

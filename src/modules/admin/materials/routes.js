@@ -9,7 +9,11 @@ router.use(adminResponse);
 
 router.get("/", asyncHandler(controller.listMaterials));
 router.get("/:id", asyncHandler(controller.getMaterial));
-router.post("/", requireBodyKeys(["name", "slug"]), asyncHandler(controller.createMaterial));
+router.post(
+  "/",
+  requireBodyKeys(["name", "slug"]),
+  asyncHandler(controller.createMaterial),
+);
 router.put("/:id", asyncHandler(controller.updateMaterial));
 router.patch("/:id", asyncHandler(controller.updateMaterial));
 router.delete("/:id", asyncHandler(controller.deleteMaterial));

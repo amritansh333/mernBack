@@ -1,9 +1,9 @@
-import fs from 'fs/promises';
-import path from 'path';
+import fs from "fs/promises";
+import path from "path";
 
-const UPLOAD_ROOT = path.join(process.cwd(), 'public', 'uploads');
+const UPLOAD_ROOT = path.join(process.cwd(), "public", "uploads");
 
-export const listMedia = async ({ page = 1, limit = 10, search = '' }) => {
+export const listMedia = async ({ page = 1, limit = 10, search = "" }) => {
   const folders = await fs.readdir(UPLOAD_ROOT).catch(() => []);
   const items = [];
 
@@ -23,12 +23,13 @@ export const listMedia = async ({ page = 1, limit = 10, search = '' }) => {
         size: fstat.size,
         updatedAt: fstat.mtime,
       };
-      if (!search || file.toLowerCase().includes(search.toLowerCase())) items.push(item);
+      if (!search || file.toLowerCase().includes(search.toLowerCase()))
+        items.push(item);
     }
   }
 
   // sort by updatedAt desc
-  items.sort((a,b)=> new Date(b.updatedAt) - new Date(a.updatedAt));
+  items.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
 
   const total = items.length;
   const pages = Math.max(1, Math.ceil(total / limit));
@@ -55,7 +56,13 @@ export const getMediaItem = async (folder, filename) => {
   const filePath = path.join(UPLOAD_ROOT, folder, filename);
   const stat = await fs.stat(filePath).catch(() => null);
   if (!stat || !stat.isFile()) return null;
-  return { filename, folder, url: `/uploads/${folder}/${filename}`, size: stat.size, updatedAt: stat.mtime };
+  return {
+    filename,
+    folder,
+    url: `/uploads/${folder}/${filename}`,
+    size: stat.size,
+    updatedAt: stat.mtime,
+  };
 };
 
 export default { listMedia, countMedia, getMediaItem };

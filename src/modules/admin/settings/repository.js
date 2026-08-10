@@ -11,4 +11,13 @@ export const updateById = (id, payload, opts = { new: true }) =>
 export const deleteById = (id) => Setting.findByIdAndDelete(id).lean();
 export const deleteMany = (ids) => Setting.deleteMany({ _id: { $in: ids } });
 
-export default { count, find, findById, findOne, create, updateById, deleteById, deleteMany };
+export default {
+  count,
+  find,
+  findById,
+  findOne,
+  create,
+  updateById,
+  deleteById,
+  deleteMany,
+};

@@ -8,7 +8,10 @@ router.use(adminResponse);
 
 router.get("/", asyncHandler(controller.listDrawingRequests));
 router.get("/:id", asyncHandler(controller.getDrawingRequest));
-router.patch("/:id/status", asyncHandler(controller.updateDrawingRequestStatus));
+router.patch(
+  "/:id/status",
+  asyncHandler(controller.updateDrawingRequestStatus),
+);
 router.delete("/:id", asyncHandler(controller.deleteDrawingRequest));
 
 export default router;

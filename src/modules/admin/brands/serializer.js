@@ -4,6 +4,7 @@ export const serializeBrand = (doc) => {
   return { id: _id, name, slug, isVisible: !!isVisible, createdAt, updatedAt };
 };
 
-export const serializeList = (docs) => (Array.isArray(docs) ? docs.map(serializeBrand) : []);
+export const serializeList = (docs) =>
+  Array.isArray(docs) ? docs.map(serializeBrand) : [];
 
 export default { serializeBrand, serializeList };

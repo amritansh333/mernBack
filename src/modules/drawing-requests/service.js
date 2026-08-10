@@ -7,7 +7,16 @@ import logger from "../../config/logger.js";
 
 const MAX_FILES = 5;
 const MAX_FILE_SIZE_BYTES = 20 * 1024 * 1024;
-const ALLOWED_EXTENSIONS = new Set([".pdf", ".png", ".jpg", ".jpeg", ".dwg", ".dxf", ".step", ".stp"]);
+const ALLOWED_EXTENSIONS = new Set([
+  ".pdf",
+  ".png",
+  ".jpg",
+  ".jpeg",
+  ".dwg",
+  ".dxf",
+  ".step",
+  ".stp",
+]);
 const CAD_EXTENSIONS = new Set([".dwg", ".dxf", ".step", ".stp"]);
 const ALLOWED_MIME_TYPES_BY_EXTENSION = {
   pdf: ["application/pdf"],
@@ -82,7 +91,8 @@ const isSafeOriginalName = (originalName) => {
   return true;
 };
 
-const getFileExtension = (originalName) => path.extname(originalName).toLowerCase();
+const getFileExtension = (originalName) =>
+  path.extname(originalName).toLowerCase();
 
 const isAllowedMimeType = (extension, mimeType) => {
   const allowed = ALLOWED_MIME_TYPES_BY_EXTENSION[extension.slice(1)];
@@ -163,7 +173,10 @@ export const drawingRequestUpload = (req, res, next) => {
       }
     }
 
-    logger.warn({ err: error, ip: req.ip, url: req.originalUrl }, "Drawing request upload failed");
+    logger.warn(
+      { err: error, ip: req.ip, url: req.originalUrl },
+      "Drawing request upload failed",
+    );
     next(error);
   });
 };
@@ -178,7 +191,10 @@ const cleanupUploadedFiles = async (files = []) => {
       await fs.promises.unlink(file.path);
     } catch (err) {
       if (err.code !== "ENOENT") {
-        logger.warn({ err, path: file.path }, "Failed to remove uploaded drawing after validation failure");
+        logger.warn(
+          { err, path: file.path },
+          "Failed to remove uploaded drawing after validation failure",
+        );
       }
     }
   });
@@ -186,7 +202,14 @@ const cleanupUploadedFiles = async (files = []) => {
   await Promise.all(cleanupPromises);
 };
 
-export const createDrawingRequest = async ({ fullName, company, email, phone, notes, files }) => {
+export const createDrawingRequest = async ({
+  fullName,
+  company,
+  email,
+  phone,
+  notes,
+  files,
+}) => {
   const normalizedFiles = Array.isArray(files) ? files : [];
   const payload = {
     fullName: typeof fullName === "string" ? fullName.trim() : "",
@@ -198,35 +221,66 @@ export const createDrawingRequest = async ({ fullName, company, email, phone, no
 
   const errors = [];
 
-  if (!payload.fullName || payload.fullName.length < 2 || payload.fullName.length > 100) {
-    errors.push({ field: "fullName", message: "Full name is required and must be between 2 and 100 characters" });
+  if (
+    !payload.fullName ||
+    payload.fullName.length < 2 ||
+    payload.fullName.length > 100
+  ) {
+    errors.push({
+      field: "fullName",
+      message: "Full name is required and must be between 2 and 100 characters",
+    });
   }
 
-  if (!payload.company || payload.company.length === 0 || payload.company.length > 150) {
-    errors.push({ field: "company", message: "Company is required and must not exceed 150 characters" });
+  if (
+    !payload.company ||
+    payload.company.length === 0 ||
+    payload.company.length > 150
+  ) {
+    errors.push({
+      field: "company",
+      message: "Company is required and must not exceed 150 characters",
+    });
   }
 
   if (!payload.phone || !/^\d{7,15}$/.test(payload.phone)) {
-    errors.push({ field: "phone", message: "Phone number is required and must contain 7 to 15 digits" });
+    errors.push({
+      field: "phone",
+      message: "Phone number is required and must contain 7 to 15 digits",
+    });
   }
 
   if (payload.email && !isValidEmail(payload.email)) {
-    errors.push({ field: "email", message: "Email must be a valid email address" });
+    errors.push({
+      field: "email",
+      message: "Email must be a valid email address",
+    });
   }
 
   if (normalizedFiles.length === 0) {
-    errors.push({ field: "drawings", message: "At least one drawing file is required" });
+    errors.push({
+      field: "drawings",
+      message: "At least one drawing file is required",
+    });
   }
 
   if (normalizedFiles.length > MAX_FILES) {
-    errors.push({ field: "drawings", message: "No more than 5 drawing files are allowed" });
+    errors.push({
+      field: "drawings",
+      message: "No more than 5 drawing files are allowed",
+    });
   }
 
   const originalNameSet = new Set();
   normalizedFiles.forEach((file) => {
-    const originalName = String(file.originalname || "").trim().toLowerCase();
+    const originalName = String(file.originalname || "")
+      .trim()
+      .toLowerCase();
     if (originalNameSet.has(originalName)) {
-      errors.push({ field: "drawings", message: "Duplicate file names are not allowed" });
+      errors.push({
+        field: "drawings",
+        message: "Duplicate file names are not allowed",
+      });
     }
     originalNameSet.add(originalName);
   });
@@ -246,7 +300,9 @@ export const createDrawingRequest = async ({ fullName, company, email, phone, no
   const payloadFiles = normalizedFiles.map((file) => {
     const originalName = path.basename(file.originalname || "");
     const extension = getFileExtension(originalName).slice(1);
-    const relativePath = path.join("uploads", "drawings", year, month, file.filename).replace(/\\/g, "/");
+    const relativePath = path
+      .join("uploads", "drawings", year, month, file.filename)
+      .replace(/\\/g, "/");
 
     return {
       originalName,

@@ -9,12 +9,18 @@ const fileSchema = new mongoose.Schema(
     size: { type: Number, required: true },
     relativePath: { type: String, required: true, trim: true },
   },
-  { _id: false }
+  { _id: false },
 );
 
 const drawingRequestSchema = new mongoose.Schema(
   {
-    fullName: { type: String, required: true, trim: true, minlength: 2, maxlength: 100 },
+    fullName: {
+      type: String,
+      required: true,
+      trim: true,
+      minlength: 2,
+      maxlength: 100,
+    },
     company: { type: String, required: true, trim: true, maxlength: 150 },
     email: {
       type: String,
@@ -22,7 +28,8 @@ const drawingRequestSchema = new mongoose.Schema(
       lowercase: true,
       default: "",
       validate: {
-        validator: (value) => !value || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value),
+        validator: (value) =>
+          !value || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value),
         message: "Invalid email address",
       },
     },
@@ -44,7 +51,7 @@ const drawingRequestSchema = new mongoose.Schema(
     },
     files: { type: [fileSchema], required: true, default: [] },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 drawingRequestSchema.index({ email: 1, createdAt: -1 });

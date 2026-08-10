@@ -37,6 +37,7 @@ export const serializeProduct = (doc) => {
   };
 };
 
-export const serializeList = (docs) => (Array.isArray(docs) ? docs.map(serializeProduct) : []);
+export const serializeList = (docs) =>
+  Array.isArray(docs) ? docs.map(serializeProduct) : [];
 
 export default { serializeProduct, serializeList };

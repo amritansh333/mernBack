@@ -35,7 +35,10 @@ const validateRequiredEnv = (required) => {
 
 const nodeEnv = getEnv("NODE_ENV", "development");
 const isProduction = nodeEnv === "production";
-const required = ["MONGO_URI", ...(isProduction ? ["BROCHURE_JWT_SECRET"] : [])];
+const required = [
+  "MONGO_URI",
+  ...(isProduction ? ["BROCHURE_JWT_SECRET"] : []),
+];
 const corsOrigins = toList(
   getEnv("CORS_ORIGINS") || getEnv("FRONTEND_URL") || getEnv("CLIENT_URL"),
 );

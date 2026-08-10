@@ -1,9 +1,9 @@
 import * as service from "./service.js";
 
 export const listLeads = async (req, res) => {
-  const page = parseInt(req.query.page || '1', 10);
-  const limit = parseInt(req.query.limit || '10', 10);
-  const search = req.query.search || req.query.q || '';
+  const page = parseInt(req.query.page || "1", 10);
+  const limit = parseInt(req.query.limit || "10", 10);
+  const search = req.query.search || req.query.q || "";
   const result = await service.listLeads({ page, limit, search });
 
   // Temporary logs to verify backend is returning Lead documents (Step 5)

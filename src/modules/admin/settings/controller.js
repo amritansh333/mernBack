@@ -27,8 +27,17 @@ export const deleteSetting = async (req, res) => {
 };
 
 export const bulkDelete = async (req, res) => {
-  const result = await service.bulkDelete(Array.isArray(req.body.ids) ? req.body.ids : []);
+  const result = await service.bulkDelete(
+    Array.isArray(req.body.ids) ? req.body.ids : [],
+  );
   return res.apiSuccess(result, "Settings deleted");
 };
 
-export default { listSettings, getSetting, createSetting, updateSetting, deleteSetting, bulkDelete };
+export default {
+  listSettings,
+  getSetting,
+  createSetting,
+  updateSetting,
+  deleteSetting,
+  bulkDelete,
+};

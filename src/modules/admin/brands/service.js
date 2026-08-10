@@ -11,8 +11,14 @@ export const listBrands = async (req) => {
   const q = {};
   if (req.query.search) q.name = { $regex: req.query.search, $options: "i" };
 
-  const [total, items] = await Promise.all([repo.count(q), repo.find(q, { sort, skip: (page - 1) * limit, limit })]);
-  return { items: items.map(serializeBrand), meta: { page, limit, total, pages: Math.ceil(total / limit) } };
+  const [total, items] = await Promise.all([
+    repo.count(q),
+    repo.find(q, { sort, skip: (page - 1) * limit, limit }),
+  ]);
+  return {
+    items: items.map(serializeBrand),
+    meta: { page, limit, total, pages: Math.ceil(total / limit) },
+  };
 };
 
 export const getBrand = async (id) => {
@@ -32,7 +38,10 @@ export const createBrand = async (payload) => {
 
 export const updateBrand = async (id, payload) => {
   if (payload.slug) {
-    const existing = await repo.findOne({ slug: payload.slug, _id: { $ne: id } });
+    const existing = await repo.findOne({
+      slug: payload.slug,
+      _id: { $ne: id },
+    });
     if (existing) throw { status: 400, message: "Duplicate slug" };
   }
   const updated = await repo.updateById(id, payload);
@@ -47,8 +56,16 @@ export const deleteBrand = async (id) => {
 };
 
 export const bulkDelete = async (ids) => {
-  if (!Array.isArray(ids) || ids.length === 0) throw { status: 400, message: "ids[] required" };
+  if (!Array.isArray(ids) || ids.length === 0)
+    throw { status: 400, message: "ids[] required" };
   return repo.deleteMany(ids);
 };
 
-export default { listBrands, getBrand, createBrand, updateBrand, deleteBrand, bulkDelete };
+export default {
+  listBrands,
+  getBrand,
+  createBrand,
+  updateBrand,
+  deleteBrand,
+  bulkDelete,
+};

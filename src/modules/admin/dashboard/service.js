@@ -35,7 +35,13 @@ export const getDashboard = async () => {
   ]);
 
   // Fetch small preview lists used on the dashboard
-  const [latestProducts, latestLeads, latestDownloads, latestMaterials, latestContentEntries] = await Promise.all([
+  const [
+    latestProducts,
+    latestLeads,
+    latestDownloads,
+    latestMaterials,
+    latestContentEntries,
+  ] = await Promise.all([
     repo.latestProducts(10),
     repo.latestLeads(10),
     repo.latestDownloads(6),
@@ -50,12 +56,12 @@ export const getDashboard = async () => {
     subcategories: totalSubcategories,
     brands: totalBrands,
     materials: totalMaterials,
-    'machine-components': totalMachineComponents,
-    'semi-finished-products': totalSemiFinished,
-    'brochure-downloads': totalBrochureDownloads,
-    'media-library': totalMediaLibrary,
+    "machine-components": totalMachineComponents,
+    "semi-finished-products": totalSemiFinished,
+    "brochure-downloads": totalBrochureDownloads,
+    "media-library": totalMediaLibrary,
     leads: totalLeads,
-    'drawing-requests': totalDrawingRequests,
+    "drawing-requests": totalDrawingRequests,
     enquiries: totalEnquiries,
     users: totalUsers,
     roles: totalRoles,

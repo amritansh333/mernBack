@@ -66,8 +66,8 @@ const setBrochureSessionCookie = (res, jwt) => {
 
 const logDevelopmentOtp = ({ lead, otp, expiresAt }) => {
   if (!env.otpLogging) {
-  return;
-}
+    return;
+  }
 
   console.log(`
 ====================================================

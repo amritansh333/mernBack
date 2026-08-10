@@ -26,6 +26,7 @@ export const serializeSubcategory = (doc) => {
   };
 };
 
-export const serializeList = (docs) => (Array.isArray(docs) ? docs.map(serializeSubcategory) : []);
+export const serializeList = (docs) =>
+  Array.isArray(docs) ? docs.map(serializeSubcategory) : [];
 
 export default { serializeSubcategory, serializeList };

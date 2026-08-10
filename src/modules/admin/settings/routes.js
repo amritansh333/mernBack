@@ -9,7 +9,11 @@ router.use(adminResponse);
 
 router.get("/", asyncHandler(controller.listSettings));
 router.get("/:id", asyncHandler(controller.getSetting));
-router.post("/", requireBodyKeys(["key", "name"]), asyncHandler(controller.createSetting));
+router.post(
+  "/",
+  requireBodyKeys(["key", "name"]),
+  asyncHandler(controller.createSetting),
+);
 router.put("/:id", asyncHandler(controller.updateSetting));
 router.patch("/:id", asyncHandler(controller.updateSetting));
 router.delete("/:id", asyncHandler(controller.deleteSetting));

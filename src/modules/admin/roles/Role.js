@@ -3,12 +3,18 @@ import mongoose from "mongoose";
 const roleSchema = new mongoose.Schema(
   {
     name: { type: String, required: true, trim: true },
-    slug: { type: String, required: true, trim: true, lowercase: true, unique: true },
+    slug: {
+      type: String,
+      required: true,
+      trim: true,
+      lowercase: true,
+      unique: true,
+    },
     description: { type: String, default: "", trim: true },
     permissions: { type: [String], default: [] },
     meta: { type: Object, default: {} },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 export default mongoose.model("Role", roleSchema);
