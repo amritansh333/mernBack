@@ -1,8 +1,9 @@
-import Category from "../../../models/Category.js";
-import Product from "../../../models/Product.js";
 import * as repo from "./repository.js";
-import * as productsRepo from "../products/repository.js";
-import { serializeCategory, serializeList } from "./serializer.js";
+import {
+  serializeCategory,
+  serializeCategoryDetail,
+  serializeList,
+} from "./serializer.js";
 import { validatePagination } from "./validator.js";
 
 const buildQueryFromReq = (req) => {
@@ -31,16 +32,8 @@ export const listCategories = async (req) => {
     repo.find(query, { sort, skip: (page - 1) * limit, limit }),
   ]);
 
-  const itemsWithMeta = await Promise.all(
-    items.map(async (item) => {
-      const productCount = await productsRepo.count({ category: item._id });
-      const subcategories = await repo.find({ parent: item._id });
-      return { ...item, productCount, subcategories };
-    }),
-  );
-
   return {
-    items: itemsWithMeta.map(serializeCategory),
+    items: items.map(serializeCategory),
     meta: { page, limit, total, pages: Math.ceil(total / limit) },
   };
 };
@@ -48,12 +41,7 @@ export const listCategories = async (req) => {
 export const getCategory = async (id) => {
   const item = await repo.findById(id);
   if (!item) return null;
-  const productCount = await Product.countDocuments({ category: item._id });
-  const subcategories = await Category.find({ parent: item._id }).lean();
-  return {
-    item: serializeCategory(item),
-    meta: { productCount, subcategories },
-  };
+  return { item: serializeCategoryDetail(item) };
 };
 
 export const createCategory = async (payload) => {

@@ -1,5 +1,9 @@
 import * as repo from "./repository.js";
-import { serializeBrand, serializeList } from "./serializer.js";
+import {
+  serializeBrand,
+  serializeBrandDetail,
+  serializeList,
+} from "./serializer.js";
 import { validatePagination } from "../categories/validator.js";
 
 export const listBrands = async (req) => {
@@ -22,9 +26,12 @@ export const listBrands = async (req) => {
 };
 
 export const getBrand = async (id) => {
-  const item = await repo.findById(id);
+  const item = await repo.findById(id, [
+    { path: "subCategory", select: "name slug" },
+    { path: "materials", select: "name slug" },
+  ]);
   if (!item) return null;
-  return { item: serializeBrand(item) };
+  return { item: serializeBrandDetail(item) };
 };
 
 export const createBrand = async (payload) => {

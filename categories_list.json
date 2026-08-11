@@ -1,0 +1,21 @@
+{
+  "success": true,
+  "message": "Categories fetched",
+  "data": [
+    {
+      "id": "699b8e751cc72ce0ae7b2690",
+      "name": "Thermoplastics Semi-Finished Products",
+      "slug": "thermoplastics-semi-finished-products",
+      "isVisible": false,
+      "updatedAt": "2026-07-12T09:13:49.200Z"
+    },
+    {
+      "id": "699b8e891cc72ce0ae7b2692",
+      "name": "Thermoplastics Machine Components",
+      "slug": "thermoplastics-machine-components",
+      "isVisible": false,
+      "updatedAt": "2026-07-12T09:13:49.261Z"
+    }
+  ],
+  "pagination": { "page": 1, "limit": 8, "total": 2, "pages": 1 }
+}

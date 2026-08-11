@@ -19,6 +19,8 @@ import usersRoutes from "./users/routes.js";
 import rolesRoutes from "./roles/routes.js";
 import settingsRoutes from "./settings/routes.js";
 import systemLogsRoutes from "./system-logs/routes.js";
+import blogRoutes from "./blog/routes.js";
+import industriesRoutes from "./industries/routes.js";
 
 const router = express.Router();
 
@@ -40,6 +42,8 @@ router.use("/users", usersRoutes);
 router.use("/roles", rolesRoutes);
 router.use("/settings", settingsRoutes);
 router.use("/system-logs", systemLogsRoutes);
+router.use("/blog", blogRoutes);
+router.use("/industries", industriesRoutes);
 router.use("/uploads", uploadsRoutes);
 router.use("/auth", authRoutes);
 

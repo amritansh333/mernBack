@@ -1,0 +1,55 @@
+{
+  "success": true,
+  "message": "Brands fetched",
+  "data": [
+    {
+      "id": "699baa2f1cc72ce0ae7b26f9",
+      "name": "Application Ready Sheets",
+      "slug": "application-ready-sheets-brand",
+      "isVisible": false
+    },
+    {
+      "id": "699b9f021cc72ce0ae7b26c6",
+      "name": "Arete",
+      "slug": "arete",
+      "isVisible": false
+    },
+    {
+      "id": "699b9f0f1cc72ce0ae7b26c8",
+      "name": "Cutrite",
+      "slug": "cutrite",
+      "isVisible": false
+    },
+    {
+      "id": "699baa231cc72ce0ae7b26f7",
+      "name": "Cutrite Chopping Board",
+      "slug": "cutrite-chopping-board",
+      "isVisible": false
+    },
+    {
+      "id": "699ba08b1cc72ce0ae7b26e6",
+      "name": "Dipra Addclear Rolls",
+      "slug": "dipra-add-clear-rolls",
+      "isVisible": false
+    },
+    {
+      "id": "699baa4b1cc72ce0ae7b26fd",
+      "name": "Fascia Pads",
+      "slug": "fascia-pads",
+      "isVisible": false
+    },
+    {
+      "id": "699ba07e1cc72ce0ae7b26e4",
+      "name": "HDGL",
+      "slug": "hdgl",
+      "isVisible": false
+    },
+    {
+      "id": "69dbcd2924c48708dc4b4a67",
+      "name": "Hitech",
+      "slug": "hitech",
+      "isVisible": false
+    }
+  ],
+  "pagination": { "page": 1, "limit": 8, "total": 34, "pages": 5 }
+}

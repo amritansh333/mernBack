@@ -8,5 +8,6 @@ router.use(adminResponse);
 
 router.get("/", asyncHandler(controller.listEnquiries));
 router.get("/:id", asyncHandler(controller.getEnquiry));
+router.patch("/:id/status", asyncHandler(controller.updateEnquiryStatus));
 
 export default router;

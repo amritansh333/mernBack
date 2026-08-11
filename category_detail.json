@@ -1,0 +1,14 @@
+{
+  "success": true,
+  "message": "Category fetched",
+  "data": {
+    "id": "699b8e751cc72ce0ae7b2690",
+    "name": "Thermoplastics Semi-Finished Products",
+    "slug": "thermoplastics-semi-finished-products",
+    "description": "Extruded and Compression-moulded Sheets, Blocks, Rods, Tubes, Welding Rods and Rolls across our full brand portfolio — POLYRIB V, H, P; DIPRA, PCCLEAR, KAYLON, PAKETAL, HITECH, ARETE, POLYLIMB and more. Available ex-stock in standard dimensions — Custom Sizes on request.",
+    "experience": "semi_finished",
+    "subCategories": [],
+    "updatedAt": "2026-07-12T09:13:49.200Z"
+  },
+  "pagination": null
+}
