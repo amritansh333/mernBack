@@ -24,7 +24,12 @@ import machineComponentRoutes from "./modules/machineComponents/routes/machineCo
 import semiFinishedRoutes from "./modules/semiFinished/routes/semiFinishedRoutes.js";
 import industryRoutes from "./routes/industryRoutes.js";
 import materialRoutes from "./routes/materialRoutes.js";
+import blogRoutes from "./modules/blog/routes.js";
 import enquiryRoutes from "./routes/enquiryRoutes.js";
+import drawingRequestRoutes from "./modules/drawing-requests/routes.js";
+
+// Admin routes
+import adminModule from "./modules/admin/index.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -43,6 +48,22 @@ app.use(compressionMiddleware);
 app.use(corsMiddleware);
 
 app.use(express.json({ limit: env.bodyLimit }));
+app.use((req, res, next) => {
+  // Simple cookie parser (avoid extra dependency install)
+  req.cookies = {};
+  const raw = req.headers && req.headers.cookie;
+  if (raw) {
+    raw.split(';').forEach((pair) => {
+      const idx = pair.indexOf('=');
+      if (idx > -1) {
+        const key = pair.slice(0, idx).trim();
+        const val = decodeURIComponent(pair.slice(idx + 1).trim());
+        req.cookies[key] = val;
+      }
+    });
+  }
+  next();
+});
 app.use(mongoSanitizeMiddleware);
 app.use(hppMiddleware);
 
@@ -59,6 +80,16 @@ app.use(
 app.use(
   "/uploads/subcategories",
   express.static(path.join(__dirname, "../public/uploads/subcategories")),
+);
+
+app.use(
+  "/uploads/blogs",
+  express.static(path.join(__dirname, "../public/uploads/blogs")),
+);
+
+app.use(
+  "/uploads/drawings",
+  express.static(path.join(__dirname, "../public/uploads/drawings")),
 );
 
 app.use(
@@ -79,8 +110,13 @@ app.use("/api/semi-finished", semiFinishedRoutes);
 app.use("/api/machine-components", machineComponentRoutes);
 app.use("/api/industries", industryRoutes);
 app.use("/api/materials", materialRoutes);
+app.use("/api/blog", blogRoutes);
 app.use("/api/enquiries", enquiryRoutes);
+app.use("/api/drawing-requests", drawingRequestRoutes);
 app.use("/api/catalogrequests", catalogRoutes);
+
+// Admin APIs (do not interfere with public routes)
+app.use("/api/admin", adminModule);
 
 app.use(notFound);
 app.use(errorHandler);

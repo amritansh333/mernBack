@@ -38,6 +38,13 @@ const enquirySchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
+
+    status: {
+      type: String,
+      enum: ["New", "Contacted", "In Progress", "Resolved", "Closed"],
+      default: "New",
+      trim: true,
+    },
   },
   { timestamps: true },
 );

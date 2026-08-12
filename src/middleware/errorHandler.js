@@ -15,11 +15,44 @@ export const errorHandler = (error, req, res, next) => {
   const statusCode = error.statusCode || error.status || 500;
 
   const payload = {
+    success: false,
     message: statusCode === 500 ? "Server error" : error.message,
   };
 
+  if (error.name === "MulterError") {
+    if (error.code === "LIMIT_FILE_SIZE") {
+      return res.status(413).json({
+        success: false,
+        message:
+          error.message || "One or more files exceed the maximum allowed size",
+      });
+    }
+
+    if (error.code === "LIMIT_FILE_COUNT") {
+      return res.status(413).json({
+        success: false,
+        message: error.message || "Too many files uploaded",
+      });
+    }
+
+    if (error.code === "LIMIT_UNEXPECTED_FILE") {
+      return res.status(415).json({
+        success: false,
+        message: error.message || "Unexpected file upload",
+      });
+    }
+
+    return res
+      .status(400)
+      .json({ success: false, message: error.message || "File upload failed" });
+  }
+
   if (!env.isProduction && statusCode === 500 && error.stack) {
     payload.stack = error.stack;
+  }
+
+  if (Array.isArray(error.errors) && error.errors.length > 0) {
+    payload.errors = error.errors;
   }
 
   const url = req.originalUrl || "";

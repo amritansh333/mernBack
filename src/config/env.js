@@ -35,7 +35,10 @@ const validateRequiredEnv = (required) => {
 
 const nodeEnv = getEnv("NODE_ENV", "development");
 const isProduction = nodeEnv === "production";
-const required = ["MONGO_URI", ...(isProduction ? ["BROCHURE_JWT_SECRET"] : [])];
+const required = [
+  "MONGO_URI",
+  ...(isProduction ? ["BROCHURE_JWT_SECRET"] : []),
+];
 const corsOrigins = toList(
   getEnv("CORS_ORIGINS") || getEnv("FRONTEND_URL") || getEnv("CLIENT_URL"),
 );
@@ -73,6 +76,7 @@ const env = Object.freeze({
   logLevel: getEnv("LOG_LEVEL", isProduction ? "info" : "debug"),
   logRequests: toBoolean(getEnv("LOG_REQUESTS"), true),
   otpLogging: toBoolean(getEnv("OTP_LOGGING"), !isProduction),
+  logToDb: toBoolean(getEnv("LOG_TO_DB"), false),
 });
 
 export default env;
