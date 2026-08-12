@@ -1,4 +1,5 @@
 import User from "./User.js";
+import bcrypt from "bcryptjs";
 
 export const listUsers = async ({
   page = 1,
@@ -22,8 +23,20 @@ export const listUsers = async ({
     User.countDocuments(filter),
   ]);
 
+  // strip sensitive fields
+  const safeRows = rows.map((r) => ({
+    id: r._id,
+    name: r.name,
+    email: r.email,
+    role: r.role,
+    status: r.status,
+    createdAt: r.createdAt,
+    updatedAt: r.updatedAt,
+    lastLoginAt: r.meta?.lastLoginAt || null,
+  }));
+
   return {
-    rows,
+    rows: safeRows,
     pagination: {
       page,
       limit,
@@ -33,16 +46,63 @@ export const listUsers = async ({
   };
 };
 
-export const getUser = async (id) => User.findById(id).lean();
-
-export const createUser = async (data) => {
-  const u = new User(data);
-  const saved = await u.save();
-  return saved.toObject();
+export const getUser = async (id) => {
+  const r = await User.findById(id).lean();
+  if (!r) return null;
+  return {
+    id: r._id,
+    name: r.name,
+    email: r.email,
+    role: r.role,
+    status: r.status,
+    createdAt: r.createdAt,
+    updatedAt: r.updatedAt,
+    lastLoginAt: r.meta?.lastLoginAt || null,
+  };
 };
 
-export const updateUser = async (id, data) =>
-  User.findByIdAndUpdate(id, data, { new: true }).lean();
+export const createUser = async (data) => {
+  const payload = { ...data };
+  if (payload.password) {
+    const salt = bcrypt.genSaltSync(10);
+    payload.passwordHash = bcrypt.hashSync(payload.password, salt);
+    delete payload.password;
+  }
+  const u = new User(payload);
+  const saved = await u.save();
+  const r = saved.toObject();
+  return {
+    id: r._id,
+    name: r.name,
+    email: r.email,
+    role: r.role,
+    status: r.status,
+    createdAt: r.createdAt,
+    updatedAt: r.updatedAt,
+    lastLoginAt: r.meta?.lastLoginAt || null,
+  };
+};
+
+export const updateUser = async (id, data) => {
+  const payload = { ...data };
+  if (payload.password) {
+    const salt = bcrypt.genSaltSync(10);
+    payload.passwordHash = bcrypt.hashSync(payload.password, salt);
+    delete payload.password;
+  }
+  const updated = await User.findByIdAndUpdate(id, payload, { new: true }).lean();
+  if (!updated) return null;
+  return {
+    id: updated._id,
+    name: updated.name,
+    email: updated.email,
+    role: updated.role,
+    status: updated.status,
+    createdAt: updated.createdAt,
+    updatedAt: updated.updatedAt,
+    lastLoginAt: updated.meta?.lastLoginAt || null,
+  };
+};
 
 export const deleteUser = async (id) => User.findByIdAndDelete(id);
 
@@ -54,7 +114,9 @@ export const bulkDeleteUsers = async (ids) => {
 export const countUsers = () => User.countDocuments({});
 
 export const latestUsers = (limit = 6) =>
-  User.find({}).sort({ createdAt: -1 }).limit(limit).lean();
+  User.find({}).sort({ createdAt: -1 }).limit(limit).lean().then((rows) =>
+    rows.map((r) => ({ id: r._id, name: r.name, email: r.email, role: r.role, createdAt: r.createdAt })),
+  );
 
 export default {
   listUsers,

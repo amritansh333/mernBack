@@ -1,29 +1,17 @@
 export const serializeSubcategory = (doc) => {
   if (!doc) return null;
-  const {
-    _id,
-    name,
-    slug,
-    category,
-    experience,
-    order,
-    image,
-    createdAt,
-    updatedAt,
-  } = doc;
-
-  return {
+  const { _id, category, ...rest } = doc;
+  const serialized = {
+    ...rest,
     id: _id,
-    name,
-    slug,
     category: category && category.name ? category : category,
-    categoryName: category && category.name ? category.name : undefined,
-    experience,
-    order,
-    image,
-    createdAt,
-    updatedAt,
   };
+
+  if (category && typeof category === 'object' && category.name) {
+    serialized.categoryName = category.name;
+  }
+
+  return serialized;
 };
 
 export const serializeList = (docs) =>

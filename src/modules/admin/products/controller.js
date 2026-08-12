@@ -9,7 +9,7 @@ export const getProduct = async (req, res) => {
   const data = await service.getProduct(req.params.id);
   if (!data || !data.item) return res.apiError(404, "Product not found");
   return res.apiSuccess(
-    { ...data.item, enquiries: data.enquiries },
+    { product: data.item, enquiries: data.enquiries },
     "Product fetched",
   );
 };

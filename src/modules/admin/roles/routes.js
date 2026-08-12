@@ -8,32 +8,37 @@ const router = express.Router();
 router.use(adminResponse);
 
 // list, create
-router.get("/", asyncHandler(controller.listRoles));
+function wrap(handlerOrArray) {
+  if (Array.isArray(handlerOrArray)) return handlerOrArray.map((h) => asyncHandler(h));
+  return asyncHandler(handlerOrArray);
+}
+
+router.get("/", ...[].concat(wrap(controller.listRoles)));
 router.post(
   "/",
   requireBodyKeys(["name", "slug"]),
-  asyncHandler(controller.createRole),
+  ...[].concat(wrap(controller.createRole)),
 );
 
 // bulk delete
-router.post("/bulk-delete", asyncHandler(controller.bulkDelete));
+router.post("/bulk-delete", ...[].concat(wrap(controller.bulkDelete)));
 
 // permission matrix and assignment
-router.get("/permissions/matrix", asyncHandler(controller.permissionMatrix));
+router.get("/permissions/matrix", ...[].concat(wrap(controller.permissionMatrix)));
 router.post(
   "/:id/permissions",
   requireBodyKeys(["permissions"]),
-  asyncHandler(controller.assignPermissions),
+  ...[].concat(wrap(controller.assignPermissions)),
 );
 router.delete(
   "/:id/permissions",
   requireBodyKeys(["permissions"]),
-  asyncHandler(controller.removePermissions),
+  ...[].concat(wrap(controller.removePermissions)),
 );
 
 // item routes
-router.get("/:id", asyncHandler(controller.getRole));
-router.put("/:id", asyncHandler(controller.updateRole));
-router.delete("/:id", asyncHandler(controller.deleteRole));
+router.get("/:id", ...[].concat(wrap(controller.getRole)));
+router.put("/:id", ...[].concat(wrap(controller.updateRole)));
+router.delete("/:id", ...[].concat(wrap(controller.deleteRole)));
 
 export default router;

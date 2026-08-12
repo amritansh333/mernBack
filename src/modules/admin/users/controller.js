@@ -1,6 +1,7 @@
 import * as service from "./service.js";
+import { requirePermission } from "../../../middleware/requireAuth.js";
 
-export const listUsers = async (req, res) => {
+export const listUsers = [requirePermission('users.read'), async (req, res) => {
   const page = parseInt(req.query.page || "1", 10);
   const limit = parseInt(req.query.limit || "10", 10);
   const search = req.query.search || "";
@@ -13,38 +14,38 @@ export const listUsers = async (req, res) => {
     data: result.rows,
     pagination: result.pagination,
   });
-};
+}];
 
-export const getUser = async (req, res) => {
+export const getUser = [requirePermission('users.read'), async (req, res) => {
   const { id } = req.params;
   const item = await service.getUser(id);
   res.json({ success: true, message: "OK", data: item });
-};
+}];
 
-export const createUser = async (req, res) => {
+export const createUser = [requirePermission('users.create'), async (req, res) => {
   const data = req.body;
   const created = await service.createUser(data);
   res.status(201).json({ success: true, message: "Created", data: created });
-};
+}];
 
-export const updateUser = async (req, res) => {
+export const updateUser = [requirePermission('users.update'), async (req, res) => {
   const { id } = req.params;
   const data = req.body;
   const updated = await service.updateUser(id, data);
   res.json({ success: true, message: "OK", data: updated });
-};
+}];
 
-export const deleteUser = async (req, res) => {
+export const deleteUser = [requirePermission('users.delete'), async (req, res) => {
   const { id } = req.params;
   await service.deleteUser(id);
   res.json({ success: true, message: "Deleted", data: true });
-};
+}];
 
-export const bulkDelete = async (req, res) => {
+export const bulkDelete = [requirePermission('users.delete'), async (req, res) => {
   const { ids } = req.body;
   const deleted = await service.bulkDeleteUsers(ids || []);
   res.json({ success: true, message: "Deleted", data: deleted });
-};
+}];
 
 export default {
   listUsers,

@@ -48,6 +48,22 @@ app.use(compressionMiddleware);
 app.use(corsMiddleware);
 
 app.use(express.json({ limit: env.bodyLimit }));
+app.use((req, res, next) => {
+  // Simple cookie parser (avoid extra dependency install)
+  req.cookies = {};
+  const raw = req.headers && req.headers.cookie;
+  if (raw) {
+    raw.split(';').forEach((pair) => {
+      const idx = pair.indexOf('=');
+      if (idx > -1) {
+        const key = pair.slice(0, idx).trim();
+        const val = decodeURIComponent(pair.slice(idx + 1).trim());
+        req.cookies[key] = val;
+      }
+    });
+  }
+  next();
+});
 app.use(mongoSanitizeMiddleware);
 app.use(hppMiddleware);
 

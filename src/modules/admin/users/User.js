@@ -10,7 +10,7 @@ const userSchema = new mongoose.Schema(
       lowercase: true,
       unique: true,
     },
-    role: { type: String, default: "User", trim: true },
+    role: { type: String, default: "viewer", trim: true },
     status: { type: String, default: "Active", trim: true },
     passwordHash: { type: String },
     meta: { type: Object, default: {} },

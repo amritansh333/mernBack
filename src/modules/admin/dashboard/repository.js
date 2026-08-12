@@ -4,10 +4,13 @@ import Brand from "../../../models/Brand.js";
 import Material from "../../../models/Material.js";
 import Enquiry from "../../../models/Enquiry.js";
 import SubCategory from "../../../models/SubCategory.js";
+import Industry from "../../../models/Industry.js";
+import BlogPost from "../../../models/BlogPost.js";
+import User from "../users/User.js";
 import mongoose from "mongoose";
-import { PRODUCT_EXPERIENCES } from "../../../constants/productExperiences.js";
 import BrochureLead from "../../brochure/models/Lead.js";
 import * as mediaService from "../media-library/service.js";
+import CatalogRequest from "../../../models/CatalogRequest.js";
 
 export const countProducts = () => Product.countDocuments({});
 export const countCategories = () => Category.countDocuments({});
@@ -16,18 +19,6 @@ export const countMaterials = () => Material.countDocuments({});
 export const countSubcategories = () =>
   SubCategory ? SubCategory.countDocuments({}) : Promise.resolve(0);
 
-// Machine components are stored in a separate admin model
-export const countMachineComponents = () => {
-  const MachineComponentAdmin = mongoose.models.MachineComponentAdmin;
-  return MachineComponentAdmin
-    ? MachineComponentAdmin.countDocuments({})
-    : Promise.resolve(0);
-};
-
-// Count Semi Finished products by product experience enum so we reuse the Product model
-export const countSemiFinishedProducts = () =>
-  Product.countDocuments({ experience: PRODUCT_EXPERIENCES.SEMI_FINISHED });
-
 // Brochure downloads / leads come from the brochure Lead model
 export const countBrochureDownloads = () => {
   // If model isn't registered for some deployments, fallback to 0
@@ -35,7 +26,7 @@ export const countBrochureDownloads = () => {
   return Model ? Model.countDocuments({}) : Promise.resolve(0);
 };
 
-// Additional optional counts: drawing requests, quote requests, media library, users, roles, settings
+// Additional optional counts: drawing requests, quote requests, media library, users, roles
 export const countDrawingRequests = () => {
   const Model = mongoose.models.DrawingRequest;
   return Model ? Model.countDocuments({}) : Promise.resolve(0);
@@ -45,6 +36,12 @@ export const countEnquiries = () => {
   // Count enquiries (single source-of-truth collection).
   return Enquiry ? Enquiry.countDocuments({}) : Promise.resolve(0);
 };
+
+export const countCatalogRequests = () => CatalogRequest.countDocuments({});
+
+export const countIndustries = () => Industry.countDocuments({});
+
+export const countBlog = () => BlogPost.countDocuments({});
 
 export const countMediaLibrary = async () => {
   const Model = mongoose.models.Media || mongoose.models.Upload;
@@ -58,10 +55,7 @@ export const countMediaLibrary = async () => {
   }
 };
 
-export const countUsers = () => {
-  const Model = mongoose.models.User;
-  return Model ? Model.countDocuments({}) : Promise.resolve(0);
-};
+export const countUsers = () => User.countDocuments({});
 
 export const countRoles = () => {
   const Model = mongoose.models.Role;
@@ -112,12 +106,11 @@ export default {
   countBrands,
   countMaterials,
   countSubcategories,
-  countMachineComponents,
-  countSemiFinishedProducts,
   countBrochureDownloads,
   countLeads,
   countDrawingRequests,
   countEnquiries,
+  countCatalogRequests,
   countMediaLibrary,
   countUsers,
   countRoles,

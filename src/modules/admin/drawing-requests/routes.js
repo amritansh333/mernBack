@@ -1,17 +1,19 @@
 import express from "express";
 import asyncHandler from "../../../middleware/asyncHandler.js";
 import * as controller from "./controller.js";
+import { requirePermission } from "../../../middleware/requireAuth.js";
 
 const router = express.Router();
 import { adminResponse } from "../common/middleware/adminResponse.js";
 router.use(adminResponse);
 
-router.get("/", asyncHandler(controller.listDrawingRequests));
-router.get("/:id", asyncHandler(controller.getDrawingRequest));
+router.get("/", requirePermission('drawingRequests.read'), asyncHandler(controller.listDrawingRequests));
+router.get("/:id", requirePermission('drawingRequests.read'), asyncHandler(controller.getDrawingRequest));
 router.patch(
   "/:id/status",
+  requirePermission('drawingRequests.update'),
   asyncHandler(controller.updateDrawingRequestStatus),
 );
-router.delete("/:id", asyncHandler(controller.deleteDrawingRequest));
+router.delete("/:id", requirePermission('drawingRequests.delete'), asyncHandler(controller.deleteDrawingRequest));
 
 export default router;

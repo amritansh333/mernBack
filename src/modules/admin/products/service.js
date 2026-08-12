@@ -42,7 +42,7 @@ export const listProducts = async (req) => {
       sort,
       skip: (page - 1) * limit,
       limit,
-      populate: ["category", "subCategory", "brand", "materials"],
+      populate: ["category", "subCategory", "brand", "materials", "industries"],
     }),
   ]);
 
@@ -58,6 +58,7 @@ export const getProduct = async (id) => {
     "subCategory",
     "brand",
     "materials",
+    "industries",
   ]);
   if (!item) return null;
   const enquiries = await repo.findEnquiriesByProductName(item.name, 5);
@@ -76,6 +77,7 @@ export const createProduct = async (payload, file) => {
     "subCategory",
     "brand",
     "materials",
+    "industries",
   ]);
   return serializeProduct(doc);
 };
@@ -96,6 +98,7 @@ export const updateProduct = async (id, payload, file) => {
     "subCategory",
     "brand",
     "materials",
+    "industries",
   ]);
   return serializeProduct(doc);
 };
