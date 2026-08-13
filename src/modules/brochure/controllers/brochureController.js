@@ -1,5 +1,6 @@
 import env from "../../../config/env.js";
 import Product from "../../../models/Product.js";
+import { getAuthenticatedAssetUrl } from "../../../services/cloudinary/cloudinaryDeliveryService.js";
 import Lead from "../models/Lead.js";
 import OtpSession from "../models/OtpSession.js";
 import {
@@ -371,14 +372,70 @@ export const downloadBrochure = async (req, res) => {
 
   const lead = req.brochureLead;
   const downloadedAt = new Date();
+
   const product = await Product.findOne({ slug: data.productSlug })
-    .select("_id slug name")
+    .select("_id slug name brochure")
     .lean();
 
   if (!product) {
     return res.status(404).json({
       success: false,
       message: "Product not found",
+    });
+  }
+
+  const brochure = product.brochure;
+
+  if (!brochure) {
+    return res.status(404).json({
+      success: false,
+      message: "Product brochure not found",
+    });
+  }
+
+  if (brochure.provider !== "cloudinary") {
+    return res.status(400).json({
+      success: false,
+      message: "Product brochure provider is invalid",
+    });
+  }
+
+  const brochurePublicId =
+    typeof brochure.publicId === "string" ? brochure.publicId.trim() : "";
+
+  if (!brochurePublicId) {
+    return res.status(400).json({
+      success: false,
+      message: "Product brochure publicId is missing",
+    });
+  }
+
+  if (brochure.resourceType !== "raw") {
+    return res.status(400).json({
+      success: false,
+      message: "Product brochure resourceType is invalid",
+    });
+  }
+
+  if (brochure.deliveryType !== "authenticated") {
+    return res.status(400).json({
+      success: false,
+      message: "Product brochure deliveryType is invalid",
+    });
+  }
+
+  let downloadUrl;
+
+  try {
+    downloadUrl = getAuthenticatedAssetUrl({
+      publicId: brochurePublicId,
+      resourceType: brochure.resourceType,
+      expiresInSeconds: 300,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Brochure download is unavailable",
     });
   }
 
@@ -401,5 +458,6 @@ export const downloadBrochure = async (req, res) => {
     message: "Authorized",
     productSlug: data.productSlug,
     downloadAuthorized: true,
+    downloadUrl,
   });
 };

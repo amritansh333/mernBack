@@ -41,6 +41,68 @@ const seoSchema = new mongoose.Schema(
   { _id: false },
 );
 
+const brochureSchema = new mongoose.Schema(
+  {
+    provider: {
+      type: String,
+      enum: ["cloudinary"],
+      trim: true,
+      default: "cloudinary",
+    },
+
+    publicId: {
+      type: String,
+      trim: true,
+      default: "",
+    },
+
+    resourceType: {
+      type: String,
+      enum: ["raw"],
+      trim: true,
+      default: "raw",
+    },
+
+    deliveryType: {
+      type: String,
+      enum: ["authenticated"],
+      trim: true,
+      default: "authenticated",
+    },
+  },
+  { _id: false },
+);
+
+brochureSchema.pre("validate", function validateBrochure(next) {
+  const hasDetail =
+    this.provider ||
+    this.publicId ||
+    this.resourceType ||
+    this.deliveryType;
+
+  if (!hasDetail) {
+    return next();
+  }
+
+  if (!this.provider || this.provider !== "cloudinary") {
+    return next(new Error("Brochure provider must be 'cloudinary' when configured."));
+  }
+
+  if (!this.publicId || !this.publicId.trim()) {
+    return next(new Error("Brochure publicId is required when a brochure is configured."));
+  }
+
+  if (this.resourceType && this.resourceType !== "raw") {
+    return next(new Error("Brochure resourceType must be 'raw'."));
+  }
+
+  if (this.deliveryType && this.deliveryType !== "authenticated") {
+    return next(new Error("Brochure deliveryType must be 'authenticated'."));
+  }
+
+  return next();
+});
+
 const productSchema = new mongoose.Schema(
   {
     name: {
@@ -149,6 +211,11 @@ const productSchema = new mongoose.Schema(
       type: String,
       trim: true,
       default: "",
+    },
+
+    brochure: {
+      type: brochureSchema,
+      default: null,
     },
 
     image: {
