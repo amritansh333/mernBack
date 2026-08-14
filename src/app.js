@@ -99,6 +99,14 @@ app.use(
 
 app.use("/pdfs", express.static(path.join(__dirname, "../public/pdfs")));
 
+app.get("/api/health", (req, res) => {
+  res.status(200).json({
+    status: "ok",
+    timestamp: new Date().toISOString(),
+    uptime: process.uptime(),
+  });
+});
+
 app.use("/api", apiRateLimiter);
 app.use("/api/categories", categoryRoutes);
 app.use("/api/subcategories", subCategoryRoutes);

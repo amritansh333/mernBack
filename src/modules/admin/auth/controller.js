@@ -6,7 +6,7 @@ import { generateSessionToken, COOKIE_NAME } from "../../../middleware/requireAu
 const COOKIE_OPTS = {
   httpOnly: true,
   secure: env.isProduction,
-  sameSite: 'none',
+  sameSite: env.isProduction ? 'none' : 'lax',
   path: '/api/admin',
 };
 
