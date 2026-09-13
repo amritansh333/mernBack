@@ -90,6 +90,11 @@ app.use(
 );
 
 app.use(
+  "/uploads/events",
+  express.static(path.join(__dirname, "../public/uploads/events")),
+);
+
+app.use(
   "/uploads/drawings",
   express.static(path.join(__dirname, "../public/uploads/drawings")),
 );
