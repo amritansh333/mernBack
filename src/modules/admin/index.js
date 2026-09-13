@@ -20,7 +20,12 @@ import usersRoutes from "./users/routes.js";
 import rolesRoutes from "./roles/routes.js";
 import systemLogsRoutes from "./system-logs/routes.js";
 import blogRoutes from "./blog/routes.js";
+import newsEventsAdminRoutes from "./news-events/routes.js";
+
 import industriesRoutes from "./industries/routes.js";
+import newsEventsRoutes from "./news-events/routes.js";
+import tagsRoutes from "./tags/routes.js";
+
 
 const router = express.Router();
 
@@ -48,6 +53,11 @@ router.use("/users", usersRoutes);
 router.use("/roles", rolesRoutes);
 router.use("/system-logs", systemLogsRoutes);
 router.use("/blog", blogRoutes);
+router.use('/news-events', newsEventsRoutes);
+router.use('/news-events/tags', tagsRoutes);
+router.use("/industries", industriesRoutes);
+router.use("/news-events", newsEventsAdminRoutes);
+
 router.use("/industries", industriesRoutes);
 router.use("/uploads", uploadsRoutes);
 
