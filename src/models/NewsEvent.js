@@ -23,12 +23,40 @@ const galleryItemSchema = new Schema(
 
 const videoSchema = new Schema(
   {
-    provider: { type: String, enum: ["youtube", "vimeo", "hosted"], required: true },
-    videoId: { type: String, required: true, trim: true },
-    title: { type: String, default: "", trim: true },
-    caption: { type: String, default: "", trim: true },
-    poster: { type: String, default: "", trim: true },
-    sortOrder: { type: Number, default: 0 },
+    url: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+
+    alt: {
+      type: String,
+      default: "",
+      trim: true,
+    },
+
+    title: {
+      type: String,
+      default: "",
+      trim: true,
+    },
+
+    caption: {
+      type: String,
+      default: "",
+      trim: true,
+    },
+
+    poster: {
+      type: String,
+      default: "",
+      trim: true,
+    },
+
+    sortOrder: {
+      type: Number,
+      default: 0,
+    },
   },
   { _id: false },
 );
