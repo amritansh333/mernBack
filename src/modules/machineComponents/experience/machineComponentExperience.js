@@ -132,6 +132,7 @@ const buildSubcategoryResponse = ({
   applications: subCategory.applications || [],
   technicalCharacteristics: subCategory.technicalCharacteristics || [],
   specifications: toPlainObject(subCategory.specifications),
+  materials: subCategory.materials ?? [],
   downloads: subCategory.downloads || [],
   seo: subCategory.seo || {},
   hierarchy: {

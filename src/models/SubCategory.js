@@ -96,6 +96,13 @@ const subCategorySchema = new mongoose.Schema(
       default: [],
     },
 
+    materials: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Material",
+      },
+    ],
+
     applications: {
       type: [String],
       default: [],
