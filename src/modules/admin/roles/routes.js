@@ -9,7 +9,8 @@ router.use(adminResponse);
 
 // list, create
 function wrap(handlerOrArray) {
-  if (Array.isArray(handlerOrArray)) return handlerOrArray.map((h) => asyncHandler(h));
+  if (Array.isArray(handlerOrArray))
+    return handlerOrArray.map((h) => asyncHandler(h));
   return asyncHandler(handlerOrArray);
 }
 
@@ -24,7 +25,10 @@ router.post(
 router.post("/bulk-delete", ...[].concat(wrap(controller.bulkDelete)));
 
 // permission matrix and assignment
-router.get("/permissions/matrix", ...[].concat(wrap(controller.permissionMatrix)));
+router.get(
+  "/permissions/matrix",
+  ...[].concat(wrap(controller.permissionMatrix)),
+);
 router.post(
   "/:id/permissions",
   requireBodyKeys(["permissions"]),

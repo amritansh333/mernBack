@@ -1,5 +1,8 @@
 import * as repository from "./repository.js";
-import { serializeCatalogRequest, serializeCatalogRequestList } from "./serializer.js";
+import {
+  serializeCatalogRequest,
+  serializeCatalogRequestList,
+} from "./serializer.js";
 
 const ALLOWED_SORT_FIELDS = new Set([
   "created_at",

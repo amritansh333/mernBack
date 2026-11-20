@@ -5,7 +5,8 @@ import * as controller from "./controller.js";
 const router = express.Router();
 
 function wrap(handlerOrArray) {
-  if (Array.isArray(handlerOrArray)) return handlerOrArray.map((h) => asyncHandler(h));
+  if (Array.isArray(handlerOrArray))
+    return handlerOrArray.map((h) => asyncHandler(h));
   return asyncHandler(handlerOrArray);
 }
 

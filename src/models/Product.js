@@ -75,21 +75,22 @@ const brochureSchema = new mongoose.Schema(
 
 brochureSchema.pre("validate", function validateBrochure(next) {
   const hasDetail =
-    this.provider ||
-    this.publicId ||
-    this.resourceType ||
-    this.deliveryType;
+    this.provider || this.publicId || this.resourceType || this.deliveryType;
 
   if (!hasDetail) {
     return next();
   }
 
   if (!this.provider || this.provider !== "cloudinary") {
-    return next(new Error("Brochure provider must be 'cloudinary' when configured."));
+    return next(
+      new Error("Brochure provider must be 'cloudinary' when configured."),
+    );
   }
 
   if (!this.publicId || !this.publicId.trim()) {
-    return next(new Error("Brochure publicId is required when a brochure is configured."));
+    return next(
+      new Error("Brochure publicId is required when a brochure is configured."),
+    );
   }
 
   if (this.resourceType && this.resourceType !== "raw") {

@@ -55,8 +55,8 @@ app.use((req, res, next) => {
   req.cookies = {};
   const raw = req.headers && req.headers.cookie;
   if (raw) {
-    raw.split(';').forEach((pair) => {
-      const idx = pair.indexOf('=');
+    raw.split(";").forEach((pair) => {
+      const idx = pair.indexOf("=");
       if (idx > -1) {
         const key = pair.slice(0, idx).trim();
         const val = decodeURIComponent(pair.slice(idx + 1).trim());
@@ -82,6 +82,11 @@ app.use(
 app.use(
   "/uploads/subcategories",
   express.static(path.join(__dirname, "../public/uploads/subcategories")),
+);
+
+app.use(
+  "/uploads/industries",
+  express.static(path.join(__dirname, "../public/uploads/industries")),
 );
 
 app.use(
@@ -129,11 +134,25 @@ app.use("/api/blog", blogRoutes);
 
 // News & Events public endpoints
 // Mount the same module under /api/news and /api/events and set a default type via small middleware
-app.use('/api/news', (req, res, next) => { req.query = { ...req.query, type: 'News' }; next(); }, newsEventsRoutes);
-app.use('/api/events', (req, res, next) => { req.query = { ...req.query, type: 'Event' }; next(); }, newsEventsRoutes);
+app.use(
+  "/api/news",
+  (req, res, next) => {
+    req.query = { ...req.query, type: "News" };
+    next();
+  },
+  newsEventsRoutes,
+);
+app.use(
+  "/api/events",
+  (req, res, next) => {
+    req.query = { ...req.query, type: "Event" };
+    next();
+  },
+  newsEventsRoutes,
+);
 
 // Also expose a combined endpoint if callers prefer: /api/news-events
-app.use('/api/news-events', newsEventsRoutes);
+app.use("/api/news-events", newsEventsRoutes);
 
 app.use("/api/enquiries", enquiryRoutes);
 app.use("/api/drawing-requests", drawingRequestRoutes);

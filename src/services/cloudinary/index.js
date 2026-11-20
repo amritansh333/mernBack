@@ -5,6 +5,4 @@ export {
 } from "./cloudinaryDeliveryService.js";
 
 export { default as cloudinaryUploadService } from "./cloudinaryUploadService.js";
-export {
-  default as cloudinaryDeliveryService,
-} from "./cloudinaryDeliveryService.js";
+export { default as cloudinaryDeliveryService } from "./cloudinaryDeliveryService.js";

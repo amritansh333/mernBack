@@ -78,9 +78,21 @@ const eventInfoSchema = new Schema(
 
 const newsEventSchema = new Schema(
   {
-    type: { type: String, enum: ["News", "Event"], required: true, index: true },
+    type: {
+      type: String,
+      enum: ["News", "Event"],
+      required: true,
+      index: true,
+    },
     title: { type: String, required: true, trim: true, maxlength: 300 },
-    slug: { type: String, required: true, trim: true, lowercase: true, unique: true, index: true },
+    slug: {
+      type: String,
+      required: true,
+      trim: true,
+      lowercase: true,
+      unique: true,
+      index: true,
+    },
     excerpt: { type: String, default: "", trim: true, maxlength: 1000 },
     body: { type: String, default: "" },
     coverImage: { type: String, default: "", trim: true },
@@ -89,7 +101,12 @@ const newsEventSchema = new Schema(
     videos: { type: [videoSchema], default: [] },
     tags: { type: [String], default: [], index: true }, // store tag slugs for compatibility
     featured: { type: Boolean, default: false, index: true },
-    status: { type: String, enum: ["draft", "published", "archived"], default: "draft", index: true },
+    status: {
+      type: String,
+      enum: ["draft", "published", "archived"],
+      default: "draft",
+      index: true,
+    },
     publishedAt: { type: Date, index: true },
     event: { type: eventInfoSchema, default: {} },
     seo: { type: seoSchema, default: {} },

@@ -90,7 +90,9 @@ export const updateUser = async (id, data) => {
     payload.passwordHash = bcrypt.hashSync(payload.password, salt);
     delete payload.password;
   }
-  const updated = await User.findByIdAndUpdate(id, payload, { new: true }).lean();
+  const updated = await User.findByIdAndUpdate(id, payload, {
+    new: true,
+  }).lean();
   if (!updated) return null;
   return {
     id: updated._id,
@@ -114,9 +116,19 @@ export const bulkDeleteUsers = async (ids) => {
 export const countUsers = () => User.countDocuments({});
 
 export const latestUsers = (limit = 6) =>
-  User.find({}).sort({ createdAt: -1 }).limit(limit).lean().then((rows) =>
-    rows.map((r) => ({ id: r._id, name: r.name, email: r.email, role: r.role, createdAt: r.createdAt })),
-  );
+  User.find({})
+    .sort({ createdAt: -1 })
+    .limit(limit)
+    .lean()
+    .then((rows) =>
+      rows.map((r) => ({
+        id: r._id,
+        name: r.name,
+        email: r.email,
+        role: r.role,
+        createdAt: r.createdAt,
+      })),
+    );
 
 export default {
   listUsers,
