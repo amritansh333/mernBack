@@ -9,9 +9,17 @@ export const getBySlug = async (slug) => {
     throw error;
   }
 
-  const related = await repo.findRelated({ currentId: doc._id, tags: doc.tags || [], type: doc.type, limit: 4 });
+  const related = await repo.findRelated({
+    currentId: doc._id,
+    tags: doc.tags || [],
+    type: doc.type,
+    limit: 4,
+  });
 
-  return { item: serializeDetail(doc), related: related.map(serializeListItem) };
+  return {
+    item: serializeDetail(doc),
+    related: related.map(serializeListItem),
+  };
 };
 
 export const list = async (filters) => {

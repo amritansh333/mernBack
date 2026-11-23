@@ -7,7 +7,15 @@ const router = express.Router();
 import { adminResponse } from "../common/middleware/adminResponse.js";
 router.use(adminResponse);
 
-router.get("/", requirePermission('media.read'), asyncHandler(controller.listMedia));
-router.get("/:folder/:filename", requirePermission('media.read'), asyncHandler(controller.getMedia));
+router.get(
+  "/",
+  requirePermission("media.read"),
+  asyncHandler(controller.listMedia),
+);
+router.get(
+  "/:folder/:filename",
+  requirePermission("media.read"),
+  asyncHandler(controller.getMedia),
+);
 
 export default router;

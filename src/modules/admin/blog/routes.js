@@ -8,49 +8,61 @@ import { requirePermission } from "../../../middleware/requireAuth.js";
 const router = express.Router();
 router.use(adminResponse);
 
-router.get("/", requirePermission('blogGallery.read'), asyncHandler(controller.listBlogs));
-router.get("/categories", requirePermission('blogGallery.read'), asyncHandler(controller.listCategories));
+router.get(
+  "/",
+  requirePermission("blogGallery.read"),
+  asyncHandler(controller.listBlogs),
+);
+router.get(
+  "/categories",
+  requirePermission("blogGallery.read"),
+  asyncHandler(controller.listCategories),
+);
 router.get(
   "/:id",
   validateObjectIdParam("id"),
-  requirePermission('blogGallery.read'),
+  requirePermission("blogGallery.read"),
   asyncHandler(controller.getBlog),
 );
-router.post("/", requirePermission('blogGallery.create'), asyncHandler(controller.createBlog));
+router.post(
+  "/",
+  requirePermission("blogGallery.create"),
+  asyncHandler(controller.createBlog),
+);
 router.put(
   "/:id",
   validateObjectIdParam("id"),
-  requirePermission('blogGallery.update'),
+  requirePermission("blogGallery.update"),
   asyncHandler(controller.updateBlog),
 );
 router.patch(
   "/:id",
   validateObjectIdParam("id"),
-  requirePermission('blogGallery.update'),
+  requirePermission("blogGallery.update"),
   asyncHandler(controller.updateBlog),
 );
 router.delete(
   "/:id",
   validateObjectIdParam("id"),
-  requirePermission('blogGallery.delete'),
+  requirePermission("blogGallery.delete"),
   asyncHandler(controller.deleteBlog),
 );
 router.patch(
   "/:id/publish",
   validateObjectIdParam("id"),
-  requirePermission('blogGallery.update'),
+  requirePermission("blogGallery.update"),
   asyncHandler(controller.publishBlog),
 );
 router.patch(
   "/:id/unpublish",
   validateObjectIdParam("id"),
-  requirePermission('blogGallery.update'),
+  requirePermission("blogGallery.update"),
   asyncHandler(controller.unpublishBlog),
 );
 router.post(
   "/:id/duplicate",
   validateObjectIdParam("id"),
-  requirePermission('blogGallery.create'),
+  requirePermission("blogGallery.create"),
   asyncHandler(controller.duplicateBlog),
 );
 

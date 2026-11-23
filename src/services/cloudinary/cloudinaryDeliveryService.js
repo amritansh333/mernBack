@@ -34,7 +34,9 @@ export const getAuthenticatedAssetUrl = ({
   expiresInSeconds = 300,
 }) => {
   if (!publicId || typeof publicId !== "string") {
-    throw new Error("publicId is required to build an authenticated Cloudinary URL");
+    throw new Error(
+      "publicId is required to build an authenticated Cloudinary URL",
+    );
   }
 
   const expiresIn = Number(expiresInSeconds);

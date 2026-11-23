@@ -5,7 +5,9 @@ export const getNewsEvent = async (req, res, next) => {
   try {
     const slug = validateSlugParam(req.params.slug);
     const result = await getBySlug(slug);
-    return res.status(200).json({ success: true, message: "Item fetched", data: result });
+    return res
+      .status(200)
+      .json({ success: true, message: "Item fetched", data: result });
   } catch (err) {
     return next(err);
   }
@@ -22,7 +24,9 @@ export const listNewsEvents = async (req, res, next) => {
 
     const result = await list(filters);
 
-    return res.status(200).json({ success: true, message: "List fetched", data: result });
+    return res
+      .status(200)
+      .json({ success: true, message: "List fetched", data: result });
   } catch (err) {
     return next(err);
   }

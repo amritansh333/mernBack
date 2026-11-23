@@ -4,7 +4,15 @@ export const findPublishedBySlug = async (slug) => {
   return NewsEvent.findOne({ slug, status: "published" }).lean();
 };
 
-export const findPublishedList = async ({ type, tag, search, featured, sort, page = 1, limit = 12 } = {}) => {
+export const findPublishedList = async ({
+  type,
+  tag,
+  search,
+  featured,
+  sort,
+  page = 1,
+  limit = 12,
+} = {}) => {
   const query = { status: "published" };
 
   if (type) query.type = type;
@@ -38,10 +46,18 @@ export const findPublishedList = async ({ type, tag, search, featured, sort, pag
 
   const totalPages = Math.ceil(total / limit);
 
-  return { items, meta: { total, page, limit, totalPages, hasNextPage: page < totalPages } };
+  return {
+    items,
+    meta: { total, page, limit, totalPages, hasNextPage: page < totalPages },
+  };
 };
 
-export const findRelated = async ({ currentId, tags = [], type, limit = 4 } = {}) => {
+export const findRelated = async ({
+  currentId,
+  tags = [],
+  type,
+  limit = 4,
+} = {}) => {
   const conditions = [];
   if (tags.length) {
     conditions.push({ tags: { $in: tags } });
@@ -52,7 +68,11 @@ export const findRelated = async ({ currentId, tags = [], type, limit = 4 } = {}
 
   if (conditions.length === 0) return [];
 
-  return NewsEvent.find({ _id: { $ne: currentId }, status: "published", $or: conditions })
+  return NewsEvent.find({
+    _id: { $ne: currentId },
+    status: "published",
+    $or: conditions,
+  })
     .sort({ publishedAt: -1 })
     .limit(limit)
     .lean();
@@ -61,7 +81,8 @@ export const findRelated = async ({ currentId, tags = [], type, limit = 4 } = {}
 // Admin repository helpers
 export const findById = (id) => NewsEvent.findById(id).lean();
 export const createEntry = (data) => NewsEvent.create(data);
-export const updateEntry = (id, data) => NewsEvent.findByIdAndUpdate(id, data, { new: true }).lean();
+export const updateEntry = (id, data) =>
+  NewsEvent.findByIdAndUpdate(id, data, { new: true }).lean();
 export const deleteEntry = (id) => NewsEvent.findByIdAndDelete(id);
 export const listAll = async ({ limit = 100, page = 1 } = {}) => {
   const skip = (page - 1) * limit;

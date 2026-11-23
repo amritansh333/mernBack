@@ -26,7 +26,6 @@ import industriesRoutes from "./industries/routes.js";
 import newsEventsRoutes from "./news-events/routes.js";
 import tagsRoutes from "./tags/routes.js";
 
-
 const router = express.Router();
 
 // Auth routes (public)
@@ -53,8 +52,8 @@ router.use("/users", usersRoutes);
 router.use("/roles", rolesRoutes);
 router.use("/system-logs", systemLogsRoutes);
 router.use("/blog", blogRoutes);
-router.use('/news-events', newsEventsRoutes);
-router.use('/news-events/tags', tagsRoutes);
+router.use("/news-events", newsEventsRoutes);
+router.use("/news-events/tags", tagsRoutes);
 router.use("/industries", industriesRoutes);
 router.use("/news-events", newsEventsAdminRoutes);
 

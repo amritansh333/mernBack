@@ -15,6 +15,8 @@ export const serializeCatalogRequest = (doc = {}) => {
   return payload;
 };
 
-export const serializeCatalogRequestList = (doc = {}) => serializeCatalogRequest(doc);
+export const serializeCatalogRequestList = (doc = {}) =>
+  serializeCatalogRequest(doc);
 
-export const serializeCatalogRequestDetail = (doc = {}) => serializeCatalogRequest(doc);
+export const serializeCatalogRequestDetail = (doc = {}) =>
+  serializeCatalogRequest(doc);

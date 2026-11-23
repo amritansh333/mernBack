@@ -115,11 +115,11 @@ export const getMachineComponentsPage = async () => {
 
 export const getMachineComponentSubcategoryPage = async (slug) => {
   const subCategory = await SubCategory.findOne({
-  slug,
-  ...machineOrUnmigratedExperience,
-})
-  .populate("materials", "name slug")
-  .lean();
+    slug,
+    ...machineOrUnmigratedExperience,
+  })
+    .populate("materials", "name slug")
+    .lean();
 
   if (!subCategory) {
     return {

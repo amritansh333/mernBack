@@ -7,7 +7,7 @@ export const serializeSubcategory = (doc) => {
     category: category && category.name ? category : category,
   };
 
-  if (category && typeof category === 'object' && category.name) {
+  if (category && typeof category === "object" && category.name) {
     serialized.categoryName = category.name;
   }
 
